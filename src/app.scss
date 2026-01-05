@@ -3,19 +3,19 @@
 @import 'tailwindcss/utilities';
 
 @layer base {
-  /* 极简东方哲思色彩系统 */
+  /* 极简东方哲思色彩系统 - 深色主题 */
   :root {
-    /* 主色调：玄黑 #1A1A1A */
-    --background: 40 20% 96%; /* 宣纸白 #F5F0E6 */
-    --foreground: 0 0% 10%; /* 玄黑 #1A1A1A */
+    /* 主色调：玄黑背景 #1A1A1A，宣纸白文字 #F5F0E6 */
+    --background: 0 0% 10%; /* 玄黑 #1A1A1A */
+    --foreground: 40 20% 96%; /* 宣纸白 #F5F0E6 */
     
     /* 卡片 */
-    --card: 40 20% 98%;
-    --card-foreground: 0 0% 10%;
+    --card: 0 0% 16%;
+    --card-foreground: 40 20% 96%;
     
     /* 弹出层 */
-    --popover: 40 20% 96%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 40 20% 96%;
     
     /* 主色：鎏金 #D4AF37 */
     --primary: 43 64% 53%; /* 鎏金 */
@@ -23,12 +23,12 @@
     --primary-glow: 43 70% 65%; /* 鎏金高光 */
     
     /* 辅助色 */
-    --secondary: 0 0% 20%;
+    --secondary: 0 0% 25%;
     --secondary-foreground: 40 20% 96%;
     
     /* 柔和色 */
-    --muted: 40 15% 88%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 28%;
+    --muted-foreground: 0 0% 70%;
     
     /* 强调色：鎏金 */
     --accent: 43 64% 53%;
@@ -39,8 +39,8 @@
     --destructive-foreground: 40 20% 96%;
     
     /* 边框和输入 */
-    --border: 0 0% 85%;
-    --input: 40 15% 92%;
+    --border: 0 0% 30%;
+    --input: 0 0% 20%;
     --ring: 43 64% 53%;
     
     /* 圆角 */
@@ -50,19 +50,24 @@
     --chart-auspicious: 43 64% 53%; /* 吉-鎏金 */
     --chart-inauspicious: 0 100% 27%; /* 凶-暗红 */
     --chart-neutral: 0 0% 70%; /* 中性-浅灰 */
-    --chart-dayun: 270 50% 50%; /* 大运-紫色 */
+    --chart-dayun: 270 91% 56%; /* 大运-紫色 #9333EA */
     
     /* 渐变 */
     --gradient-primary: linear-gradient(135deg, hsl(43 64% 53%), hsl(43 70% 65%));
-    --gradient-subtle: linear-gradient(180deg, hsl(40 20% 98%), hsl(40 20% 96%));
-    --gradient-card: linear-gradient(135deg, hsl(40 20% 98%), hsl(40 15% 94%));
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 10%), hsl(0 0% 12%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 16%), hsl(0 0% 18%));
     
     /* 阴影 */
-    --shadow-elegant: 0 4px 16px -4px hsl(0 0% 10% / 0.1);
+    --shadow-elegant: 0 4px 16px -4px hsl(0 0% 0% / 0.4);
   }
 
   * {
     font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
+  }
+  
+  page {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
@@ -78,8 +83,8 @@
     background: var(--gradient-primary);
   }
   
-  .bg-gradient-subtle {
-    background: var(--gradient-subtle);
+  .bg-gradient-dark {
+    background: var(--gradient-dark);
   }
   
   .bg-gradient-card {
@@ -97,5 +102,19 @@
   
   .btn-press:active {
     transform: scale(0.98);
+  }
+  
+  /* 八卦旋转动画 */
+  @keyframes bagua-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-bagua {
+    animation: bagua-rotate 2s linear infinite;
   }
 }
