@@ -1,5 +1,5 @@
 import {Input, Picker, Text, View} from '@tarojs/components'
-import {useState, useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {TIME_PERIODS} from '@/utils/lunar'
 import RegionPicker from './RegionPicker'
 
@@ -76,14 +76,18 @@ export default function BirthInfoForm({onChange, onSubmit}: BirthInfoFormProps) 
               calendarType === 'solar' ? 'bg-primary border-primary' : 'bg-secondary border-border'
             }`}
             onClick={() => setCalendarType('solar')}>
-            <Text className={calendarType === 'solar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>公历</Text>
+            <Text className={calendarType === 'solar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
+              公历
+            </Text>
           </View>
           <View
             className={`flex-1 py-3 rounded border text-center btn-press ${
               calendarType === 'lunar' ? 'bg-primary border-primary' : 'bg-secondary border-border'
             }`}
             onClick={() => setCalendarType('lunar')}>
-            <Text className={calendarType === 'lunar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>农历</Text>
+            <Text className={calendarType === 'lunar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
+              农历
+            </Text>
           </View>
         </View>
       </View>

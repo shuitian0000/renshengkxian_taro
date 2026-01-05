@@ -1,12 +1,12 @@
-import {View, ScrollView, Button, Text} from '@tarojs/components'
-import {useState, useCallback} from 'react'
+import {Button, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {useDidShow} from '@tarojs/taro'
+import {useCallback, useState} from 'react'
+import {supabase} from '@/client/supabase'
+import BaguaLoading from '@/components/BaguaLoading'
 import BirthInfoForm, {type BirthInfoData} from '@/components/BirthInfoForm'
 import FaceUpload, {type UploadFileInput} from '@/components/FaceUpload'
-import BaguaLoading from '@/components/BaguaLoading'
-import {supabase} from '@/client/supabase'
 import {compressImage, imageToBase64, uploadFaceImage} from '@/utils/imageHelper'
-import {generateLocalKLineData, generateDayunPeriods, generateLocalReport} from '@/utils/kline'
+import {generateDayunPeriods, generateLocalKLineData, generateLocalReport} from '@/utils/kline'
 
 export default function Index() {
   const [birthInfo, setBirthInfo] = useState<BirthInfoData | null>(null)
@@ -39,7 +39,7 @@ export default function Index() {
     if (!birthInfo || !birthInfo.name || !birthInfo.birthDate || !birthInfo.birthTime || !birthInfo.birthRegion) {
       Taro.showToast({
         title: '请填写完整信息',
-        icon: 'none',
+        icon: 'none'
       })
       return
     }
@@ -91,7 +91,7 @@ export default function Index() {
             birthTime: birthInfo.birthTime,
             birthRegion: birthInfo.birthRegion,
             calendarType: birthInfo.calendarType,
-            faceAnalysis,
+            faceAnalysis
           }
         })
 
@@ -106,8 +106,8 @@ export default function Index() {
         console.error('AI生成失败，使用本地算法:', error)
 
         // 使用本地算法生成
-        const birthYear = Number.parseInt(birthInfo.birthDate.split('-')[0])
-        const birthMonth = Number.parseInt(birthInfo.birthDate.split('-')[1])
+        const birthYear = Number.parseInt(birthInfo.birthDate.split('-')[0], 10)
+        const birthMonth = Number.parseInt(birthInfo.birthDate.split('-')[1], 10)
 
         klineData = generateLocalKLineData(birthYear, birthMonth)
         dayunPeriods = generateDayunPeriods(birthYear)
@@ -124,7 +124,7 @@ export default function Index() {
         faceImageUrl,
         klineData,
         reportData,
-        dayunPeriods,
+        dayunPeriods
       })
 
       // 跳转到K线图页面
@@ -133,7 +133,7 @@ export default function Index() {
       console.error('生成报告失败:', error)
       Taro.showToast({
         title: '生成失败，请重试',
-        icon: 'none',
+        icon: 'none'
       })
     } finally {
       setLoading(false)
@@ -143,7 +143,7 @@ export default function Index() {
   return (
     <View className="min-h-screen bg-gradient-dark">
       {loading && <BaguaLoading />}
-      
+
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="px-6 py-8">
           {/* 页面标题 */}
@@ -168,26 +168,20 @@ export default function Index() {
               <Text className="text-lg font-bold text-card-foreground">面相照片</Text>
               <Text className="text-xs text-muted-foreground ml-auto">（可选）</Text>
             </View>
-            <FaceUpload
-              onImageSelected={handleImageSelected}
-              onImageRemove={handleImageRemove}
-            />
+            <FaceUpload onImageSelected={handleImageSelected} onImageRemove={handleImageRemove} />
           </View>
 
           {/* 开始批命按钮 */}
           <Button
             className="w-full bg-primary text-primary-foreground py-4 rounded-lg break-keep text-lg font-bold btn-press"
             size="default"
-            onClick={generateReport}
-          >
+            onClick={generateReport}>
             开始批命
           </Button>
 
           {/* 提示信息 */}
           <View className="mt-6 text-center">
-            <Text className="text-xs text-muted-foreground">
-              * 面相照片需为正面免冠照，面部、头部、耳朵清晰可见
-            </Text>
+            <Text className="text-xs text-muted-foreground">* 面相照片需为正面免冠照，面部、头部、耳朵清晰可见</Text>
           </View>
         </View>
       </ScrollView>

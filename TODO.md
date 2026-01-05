@@ -7,7 +7,10 @@
 - [x] 4. 创建八卦加载动画组件（BaguaLoading.tsx，"天机推算中"文案）
 - [x] 5. 添加八卦旋转动画CSS
 - [x] 6. 更新BirthInfoForm组件，集成地区选择器和onChange模式
-- [x] 7. 修复首页空白问题（组件接口不匹配）
+- [x] 7. 修复首页空白问题
+  - 添加uploadFaceImage函数到imageHelper.ts
+  - 修复FaceUpload组件接口（添加onImageRemove属性）
+  - 导出UploadFileInput类型
 
 ## 待完成改进
 - [ ] 8. K线图页面添加命理总评
@@ -16,12 +19,16 @@
 - [ ] 11. K线点击交互（显示年龄对应的命理分析）
 - [ ] 12. K线图视觉优化（紫色虚线大运周期 + 星星图标高点标记）
 
-## 技术要点
-- 深色主题配色：玄黑(#1A1A1A)、宣纸白(#F5F0E6)、鎏金(#D4AF37)、暗红(#8B0000)、浅灰(#B3B3B3)、紫色(#9333EA)
-- 八卦加载动画：2秒旋转一周，太极图+八卦符号
-- 地区选择：省市二级联动选择器（已集成）
-- K线交互：点击显示年龄、吉凶、分析依据
-- K线视觉：紫色虚线划分大运、星星图标标记高点（涨绿跌黄）
+## 根本原因分析
+首页空白的根本原因：
+1. **缺失函数**：imageHelper.ts缺少uploadFaceImage函数导致模块加载失败
+2. **组件接口不匹配**：BirthInfoForm只接受onSubmit，首页传入onChange
+3. **类型导出问题**：FaceUpload组件未导出UploadFileInput类型
+4. **属性缺失**：FaceUpload组件缺少onImageRemove属性
 
-## 问题修复记录
-- 首页空白问题：BirthInfoForm组件只接受onSubmit属性，但首页传入的是onChange，已修复为同时支持两种模式
+## 修复措施
+1. 在imageHelper.ts中添加uploadFaceImage函数（上传到Supabase Storage）
+2. 更新BirthInfoForm支持onChange和onSubmit两种模式
+3. 在FaceUpload组件中导出UploadFileInput类型
+4. 添加onImageRemove属性并实现重新选择功能
+5. 简化FaceUpload组件，选择照片后立即触发onImageSelected回调

@@ -129,3 +129,32 @@ export async function chooseImageFile(): Promise<UploadFileInput | null> {
     return null
   }
 }
+
+/**
+ * 上传面相照片到Supabase Storage
+ */
+export async function uploadFaceImage(fileObj: any, fileName: string): Promise<string> {
+  const {supabase} = await import('@/client/supabase')
+  const bucketName = `${process.env.TARO_APP_SUPABASE_APP_ID}_face_images`
+
+  try {
+    // 确保文件名只包含英文和数字
+    const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_')
+    const uniqueFileName = `${Date.now()}_${sanitizedFileName}`
+
+    const {data, error} = await supabase.storage.from(bucketName).upload(uniqueFileName, fileObj)
+
+    if (error) {
+      console.error('上传图片失败:', error)
+      throw new Error('图片上传失败')
+    }
+
+    // 获取公开URL
+    const {data: urlData} = supabase.storage.from(bucketName).getPublicUrl(data.path)
+
+    return urlData.publicUrl
+  } catch (error) {
+    console.error('上传面相照片异常:', error)
+    throw error
+  }
+}
