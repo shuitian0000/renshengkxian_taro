@@ -2,7 +2,6 @@ import {Button, Image, Text, View} from '@tarojs/components'
 import {useState} from 'react'
 import {chooseImageFile, type UploadFileInput} from '@/utils/imageHelper'
 
-// 导出类型供其他组件使用
 export type {UploadFileInput}
 
 interface FaceUploadProps {
@@ -45,11 +44,7 @@ export default function FaceUpload({onImageSelected, onImageRemove}: FaceUploadP
       ) : (
         <View className="space-y-4">
           <View className="w-full h-64 bg-input rounded overflow-hidden flex items-center justify-center">
-            <Image
-              src={selectedImage.path}
-              mode="aspectFit"
-              className="w-full h-full"
-            />
+            <Image src={selectedImage.path} mode="aspectFit" className="w-full h-full" />
           </View>
           <View className="flex gap-4">
             <Button
@@ -57,6 +52,12 @@ export default function FaceUpload({onImageSelected, onImageRemove}: FaceUploadP
               size="default"
               onClick={handleRemoveImage}>
               重新选择
+            </Button>
+            <Button
+              className="flex-1 bg-destructive text-destructive-foreground py-3 rounded break-keep text-base"
+              size="default"
+              onClick={handleRemoveImage}>
+              清空照片
             </Button>
           </View>
         </View>

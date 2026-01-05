@@ -6,6 +6,7 @@ import RegionPicker from './RegionPicker'
 interface BirthInfoFormProps {
   onChange?: (data: BirthInfoData) => void
   onSubmit?: (data: BirthInfoData) => void
+  validationErrors?: string[]
 }
 
 export interface BirthInfoData {
@@ -16,47 +17,34 @@ export interface BirthInfoData {
   calendarType: 'solar' | 'lunar'
 }
 
-export default function BirthInfoForm({onChange, onSubmit}: BirthInfoFormProps) {
+export default function BirthInfoForm({onChange, onSubmit, validationErrors = []}: BirthInfoFormProps) {
   const [name, setName] = useState('')
   const [birthDate, setBirthDate] = useState('')
   const [birthTime, setBirthTime] = useState('')
   const [birthRegion, setBirthRegion] = useState('')
   const [calendarType, setCalendarType] = useState<'solar' | 'lunar'>('solar')
 
-  // 当任何字段变化时，通知父组件
+  const hasError = (fieldName: string) => validationErrors.includes(fieldName)
+
   useEffect(() => {
     if (onChange) {
-      onChange({
-        name,
-        birthDate,
-        birthTime,
-        birthRegion,
-        calendarType
-      })
+      onChange({name, birthDate, birthTime, birthRegion, calendarType})
     }
   }, [name, birthDate, birthTime, birthRegion, calendarType, onChange])
 
   const handleSubmit = () => {
-    if (!name || !birthDate || !birthTime || !birthRegion) {
-      return
-    }
+    if (!name || !birthDate || !birthTime || !birthRegion) return
     if (onSubmit) {
-      onSubmit({
-        name,
-        birthDate,
-        birthTime,
-        birthRegion,
-        calendarType
-      })
+      onSubmit({name, birthDate, birthTime, birthRegion, calendarType})
     }
   }
 
   return (
     <View className="w-full space-y-6">
-      {/* 姓名 */}
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">姓名</Text>
-        <View className="bg-input rounded border border-border px-4 py-3">
+        <View
+          className={`bg-input rounded px-4 py-3 ${hasError('姓名') ? 'border-2 border-destructive' : 'border border-border'}`}>
           <Input
             className="w-full text-card-foreground"
             placeholder="请输入姓名"
@@ -66,24 +54,18 @@ export default function BirthInfoForm({onChange, onSubmit}: BirthInfoFormProps) 
           />
         </View>
       </View>
-
-      {/* 历法类型 */}
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">历法类型</Text>
         <View className="flex gap-4">
           <View
-            className={`flex-1 py-3 rounded border text-center btn-press ${
-              calendarType === 'solar' ? 'bg-primary border-primary' : 'bg-secondary border-border'
-            }`}
+            className={`flex-1 py-3 rounded border text-center btn-press ${calendarType === 'solar' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
             onClick={() => setCalendarType('solar')}>
             <Text className={calendarType === 'solar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
               公历
             </Text>
           </View>
           <View
-            className={`flex-1 py-3 rounded border text-center btn-press ${
-              calendarType === 'lunar' ? 'bg-primary border-primary' : 'bg-secondary border-border'
-            }`}
+            className={`flex-1 py-3 rounded border text-center btn-press ${calendarType === 'lunar' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
             onClick={() => setCalendarType('lunar')}>
             <Text className={calendarType === 'lunar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
               农历
@@ -91,46 +73,40 @@ export default function BirthInfoForm({onChange, onSubmit}: BirthInfoFormProps) 
           </View>
         </View>
       </View>
-
-      {/* 出生日期 */}
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">出生日期</Text>
         <Picker mode="date" value={birthDate} onChange={(e) => setBirthDate(e.detail.value)}>
-          <View className="bg-input rounded border border-border px-4 py-3">
+          <View
+            className={`bg-input rounded px-4 py-3 ${hasError('出生日期') ? 'border-2 border-destructive' : 'border border-border'}`}>
             <Text className={birthDate ? 'text-card-foreground' : 'text-muted-foreground'}>
               {birthDate || '请选择出生日期'}
             </Text>
           </View>
         </Picker>
       </View>
-
-      {/* 出生时辰 */}
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">出生时辰</Text>
         <Picker
           mode="selector"
           range={TIME_PERIODS.map((t) => t.label)}
           onChange={(e) => setBirthTime(TIME_PERIODS[e.detail.value].value)}>
-          <View className="bg-input rounded border border-border px-4 py-3">
+          <View
+            className={`bg-input rounded px-4 py-3 ${hasError('出生时辰') ? 'border-2 border-destructive' : 'border border-border'}`}>
             <Text className={birthTime ? 'text-card-foreground' : 'text-muted-foreground'}>
               {birthTime ? TIME_PERIODS.find((t) => t.value === birthTime)?.label : '请选择出生时辰'}
             </Text>
           </View>
         </Picker>
       </View>
-
-      {/* 出生地区 */}
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">出生地区</Text>
-        <RegionPicker value={birthRegion} onChange={setBirthRegion} />
+        <View className={hasError('出生地区') ? 'border-2 border-destructive rounded' : ''}>
+          <RegionPicker value={birthRegion} onChange={setBirthRegion} />
+        </View>
       </View>
-
-      {/* 提交按钮（仅在有onSubmit时显示） */}
       {onSubmit && (
         <View
-          className={`w-full py-4 rounded text-center btn-press ${
-            name && birthDate && birthTime && birthRegion ? 'bg-primary' : 'bg-muted'
-          }`}
+          className={`w-full py-4 rounded text-center btn-press ${name && birthDate && birthTime && birthRegion ? 'bg-primary' : 'bg-muted'}`}
           onClick={handleSubmit}>
           <Text
             className={
