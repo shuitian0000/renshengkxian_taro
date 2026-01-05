@@ -3,74 +3,99 @@
 @import 'tailwindcss/utilities';
 
 @layer base {
+  /* 极简东方哲思色彩系统 */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 72.22% 50.59%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5% 64.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 240 5% 64.9%;
+    /* 主色调：玄黑 #1A1A1A */
+    --background: 40 20% 96%; /* 宣纸白 #F5F0E6 */
+    --foreground: 0 0% 10%; /* 玄黑 #1A1A1A */
+    
+    /* 卡片 */
+    --card: 40 20% 98%;
+    --card-foreground: 0 0% 10%;
+    
+    /* 弹出层 */
+    --popover: 40 20% 96%;
+    --popover-foreground: 0 0% 10%;
+    
+    /* 主色：鎏金 #D4AF37 */
+    --primary: 43 64% 53%; /* 鎏金 */
+    --primary-foreground: 0 0% 10%;
+    --primary-glow: 43 70% 65%; /* 鎏金高光 */
+    
+    /* 辅助色 */
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 40 20% 96%;
+    
+    /* 柔和色 */
+    --muted: 40 15% 88%;
+    --muted-foreground: 0 0% 40%;
+    
+    /* 强调色：鎏金 */
+    --accent: 43 64% 53%;
+    --accent-foreground: 0 0% 10%;
+    
+    /* 功能色：凶-暗红 #8B0000 */
+    --destructive: 0 100% 27%;
+    --destructive-foreground: 40 20% 96%;
+    
+    /* 边框和输入 */
+    --border: 0 0% 85%;
+    --input: 40 15% 92%;
+    --ring: 43 64% 53%;
+    
+    /* 圆角 */
+    --radius: 0.25rem;
+    
+    /* K线图颜色 */
+    --chart-auspicious: 43 64% 53%; /* 吉-鎏金 */
+    --chart-inauspicious: 0 100% 27%; /* 凶-暗红 */
+    --chart-neutral: 0 0% 70%; /* 中性-浅灰 */
+    --chart-dayun: 270 50% 50%; /* 大运-紫色 */
+    
+    /* 渐变 */
+    --gradient-primary: linear-gradient(135deg, hsl(43 64% 53%), hsl(43 70% 65%));
+    --gradient-subtle: linear-gradient(180deg, hsl(40 20% 98%), hsl(40 20% 96%));
+    --gradient-card: linear-gradient(135deg, hsl(40 20% 98%), hsl(40 15% 94%));
+    
+    /* 阴影 */
+    --shadow-elegant: 0 4px 16px -4px hsl(0 0% 10% / 0.1);
   }
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 240 4.9% 83.9%;
+  * {
+    font-family: 'Source Han Serif CN', 'Noto Serif SC', serif;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .bg-gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+  
+  .bg-gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  /* 按钮点击反馈 */
+  .btn-press {
+    transition: transform 200ms ease;
+  }
+  
+  .btn-press:active {
+    transform: scale(0.98);
   }
 }
