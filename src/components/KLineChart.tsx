@@ -9,6 +9,45 @@ interface KLineChartProps {
   fullscreen?: boolean
 }
 
+// 根据年龄和运势生成具体的分析依据
+function generateAnalysisBasis(point: KLineDataPoint): string {
+  const {age, score, trend} = point
+  const isAuspicious = trend === '吉'
+
+  // 人生阶段判断
+  let lifeStage = ''
+  let stageAdvice = ''
+  if (age <= 18) {
+    lifeStage = '少年求学阶段'
+    stageAdvice = isAuspicious ? '学业运势旺盛，宜专注学习，打好基础' : '学业需加倍努力，切勿懈怠，多请教师长'
+  } else if (age <= 30) {
+    lifeStage = '青年创业阶段'
+    stageAdvice = isAuspicious ? '事业运势上扬，宜积极进取，把握机遇' : '事业发展受阻，宜稳扎稳打，积累经验'
+  } else if (age <= 45) {
+    lifeStage = '中年发展阶段'
+    stageAdvice = isAuspicious ? '事业财运俱佳，宜大展宏图，开拓创新' : '运势起伏较大，宜谨慎决策，守成为主'
+  } else if (age <= 60) {
+    lifeStage = '成熟稳定阶段'
+    stageAdvice = isAuspicious ? '运势平稳向好，宜传承经验，培养后进' : '健康需多关注，宜修身养性，平和心态'
+  } else {
+    lifeStage = '晚年颐养阶段'
+    stageAdvice = isAuspicious ? '福寿安康，宜享天伦之乐，颐养天年' : '注意身体保养，宜清心寡欲，安度晚年'
+  }
+
+  // 五行分析
+  const wuxingAnalysis = isAuspicious
+    ? '五行流转顺畅，天时地利人和，诸事易成'
+    : '五行相克较重，需注意调和阴阳，化解不利'
+
+  // 社会环境分析
+  const socialAnalysis = isAuspicious
+    ? '所处时代环境有利，社会发展趋势向好，顺势而为可获成功'
+    : '外部环境存在挑战，需审时度势，避免冒进，以守为攻'
+
+  // 综合分析
+  return `【${lifeStage}】${stageAdvice}。【命理分析】${wuxingAnalysis}。【环境因素】${socialAnalysis}。综合评分${score.toFixed(1)}分，运势${trend === '吉' ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇' : '谨慎行事，蓄势待发'}。`
+}
+
 export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLineChartProps) {
   const [selectedPoint, setSelectedPoint] = useState<KLineDataPoint | null>(null)
   const [isLandscape, setIsLandscape] = useState(false)
@@ -95,7 +134,8 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLi
             const closeY = getYPosition(point.close)
             const highY = getYPosition(point.high)
             const lowY = getYPosition(point.low)
-            const isAuspicious = point.close >= point.open
+            // 使用trend字段判断吉凶，而不是close和open的比较
+            const isAuspicious = point.trend === '吉'
             const color = isAuspicious ? 'hsl(var(--chart-auspicious))' : 'hsl(var(--chart-inauspicious))'
             const bodyHeight = Math.abs(closeY - openY)
             const bodyTop = Math.min(openY, closeY)
@@ -162,21 +202,24 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLi
                 <Text className="text-sm text-muted-foreground">吉凶趋势</Text>
                 <Text
                   className={`text-sm font-bold ${selectedPoint.trend === '吉' ? 'text-chart-auspicious' : 'text-chart-inauspicious'}`}>
-                  {selectedPoint.trend}
+                  {selectedPoint.trend === '吉' ? '运势向好' : '运势欠佳'}
                 </Text>
               </View>
 
               <View className="space-y-2">
                 <Text className="text-sm font-bold text-card-foreground">运势分析</Text>
                 <Text className="text-sm text-muted-foreground leading-relaxed">
-                  {selectedPoint.description || '此年运势平稳，宜顺势而为，积极进取。'}
+                  {selectedPoint.description ||
+                    (selectedPoint.trend === '吉'
+                      ? '此年运势向好，诸事顺遂，宜积极进取，把握机遇。'
+                      : '此年运势欠佳，多有波折，宜谨慎行事，稳中求进。')}
                 </Text>
               </View>
 
               <View className="space-y-2">
                 <Text className="text-sm font-bold text-card-foreground">分析依据</Text>
                 <Text className="text-xs text-muted-foreground leading-relaxed">
-                  综合八字命理、性格特征、社会发展趋势、地区环境等多维度因素，结合传统命理学理论进行推演。
+                  {generateAnalysisBasis(selectedPoint)}
                 </Text>
               </View>
             </View>

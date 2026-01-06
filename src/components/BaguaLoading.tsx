@@ -48,15 +48,25 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
           </View>
         </View>
 
-        {/* 中心太极图 */}
+        {/* 中心太极图 - 阴阳鱼旋转 */}
         <View className="absolute inset-0 flex items-center justify-center">
-          <View className="w-16 h-16 rounded-full bg-primary relative overflow-hidden">
-            {/* 阴阳分界 */}
-            <View className="absolute top-0 left-0 w-full h-1/2 bg-background rounded-t-full" />
-            <View className="absolute top-1/4 left-1/4 w-2 h-2 bg-background rounded-full" />
+          <View
+            className="w-20 h-20 rounded-full relative overflow-hidden animate-spin"
+            style={{animationDuration: '3s'}}>
+            {/* 阴阳分界 - S形曲线 */}
+            <View className="absolute inset-0 bg-primary" />
+            {/* 阳鱼（白色） */}
+            <View className="absolute top-0 right-0 w-1/2 h-full bg-background" />
+            <View className="absolute top-0 right-1/4 w-1/2 h-1/2 rounded-full bg-background" />
+            <View className="absolute bottom-0 left-1/4 w-1/2 h-1/2 rounded-full bg-primary" />
+            {/* 鱼眼 */}
             <View
-              className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-primary rounded-full"
-              style={{backgroundColor: 'hsl(var(--background))'}}
+              className="absolute w-3 h-3 rounded-full bg-primary"
+              style={{top: '25%', right: '25%', transform: 'translate(50%, -50%)'}}
+            />
+            <View
+              className="absolute w-3 h-3 rounded-full bg-background"
+              style={{bottom: '25%', left: '25%', transform: 'translate(-50%, 50%)'}}
             />
           </View>
         </View>
