@@ -1,4 +1,4 @@
-import {ScrollView, Text, View} from '@tarojs/components'
+import {Button, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {useDidShow} from '@tarojs/taro'
 import {useCallback, useState} from 'react'
 import {supabase} from '@/client/supabase'
@@ -11,34 +11,26 @@ export default function Chart() {
   const [saving, setSaving] = useState(false)
 
   useDidShow(() => {
-    // 从缓存读取报告数据
     const data = Taro.getStorageSync('currentReport')
     if (data) {
       setReportData(data)
     } else {
-      Taro.showToast({
-        title: '数据加载失败',
-        icon: 'none'
-      })
+      Taro.showToast({title: '数据加载失败', icon: 'none'})
       setTimeout(() => {
         Taro.switchTab({url: '/pages/index/index'})
       }, 1500)
     }
   })
 
-  // 切换全屏
   const toggleFullscreen = useCallback(() => {
     setFullscreen(!fullscreen)
   }, [fullscreen])
 
-  // 查看报告详情
   const viewReport = useCallback(() => {
     Taro.navigateTo({url: '/pages/report/index'})
   }, [])
 
-  // 保存报告
   const handleSave = useCallback(async () => {
-    // 检查登录状态
     const {
       data: {session}
     } = await supabase.auth.getSession()
@@ -62,9 +54,7 @@ export default function Chart() {
 
     try {
       const user = await getCurrentUser()
-      if (!user) {
-        throw new Error('获取用户信息失败')
-      }
+      if (!user) throw new Error('获取用户信息失败')
 
       const saved = await saveReport({
         user_id: user.id,
@@ -79,28 +69,20 @@ export default function Chart() {
       })
 
       Taro.hideLoading()
-
       if (saved) {
-        Taro.showToast({
-          title: '保存成功',
-          icon: 'success'
-        })
+        Taro.showToast({title: '保存成功', icon: 'success'})
       } else {
         throw new Error('保存失败')
       }
     } catch (error) {
       console.error('保存报告失败:', error)
       Taro.hideLoading()
-      Taro.showToast({
-        title: '保存失败，请重试',
-        icon: 'none'
-      })
+      Taro.showToast({title: '保存失败，请重试', icon: 'none'})
     } finally {
       setSaving(false)
     }
   }, [reportData])
 
-  // 重新推演
   const handleRegenerate = useCallback(async () => {
     Taro.showModal({
       title: '重新推演',
@@ -108,9 +90,7 @@ export default function Chart() {
       success: async (res) => {
         if (res.confirm) {
           Taro.showLoading({title: '生成中...', mask: true})
-
           try {
-            // 调用Edge Function重新生成
             const {data: reportResult, error: reportError} = await supabase.functions.invoke(
               'generate-destiny-report',
               {
@@ -124,39 +104,30 @@ export default function Chart() {
                 }
               }
             )
-
-            if (reportError) {
-              throw new Error('生成失败')
-            }
-
-            // 更新报告数据
+            if (reportError) throw new Error('生成失败')
             const newReportData = {
               ...reportData,
               klineData: reportResult.klineData,
               reportData: reportResult.report,
               dayunPeriods: reportResult.dayunPeriods
             }
-
             setReportData(newReportData)
             Taro.setStorageSync('currentReport', newReportData)
-
             Taro.hideLoading()
-            Taro.showToast({
-              title: '重新生成成功',
-              icon: 'success'
-            })
+            Taro.showToast({title: '重新生成成功', icon: 'success'})
           } catch (error) {
             console.error('重新生成失败:', error)
             Taro.hideLoading()
-            Taro.showToast({
-              title: '生成失败，请重试',
-              icon: 'none'
-            })
+            Taro.showToast({title: '生成失败，请重试', icon: 'none'})
           }
         }
       }
     })
   }, [reportData])
+
+  const handleBack = useCallback(() => {
+    Taro.switchTab({url: '/pages/index/index'})
+  }, [])
 
   if (!reportData) {
     return (
@@ -166,11 +137,12 @@ export default function Chart() {
     )
   }
 
+  const summary = reportData.reportData?.summary
+
   return (
-    <View className="min-h-screen bg-background">
+    <View className="min-h-screen bg-gradient-dark">
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="space-y-6 pb-8">
-          {/* 标题信息 */}
           <View className="bg-gradient-card px-8 py-6 space-y-2">
             <Text className="text-2xl font-bold text-foreground">{reportData.name}的人生K线图</Text>
             <Text className="text-muted-foreground text-sm">
@@ -179,11 +151,29 @@ export default function Chart() {
             <Text className="text-muted-foreground text-sm">出生地区：{reportData.birthRegion}</Text>
           </View>
 
-          {/* K线图 */}
+          {summary && (
+            <View className="px-8">
+              <View className="bg-card rounded-lg p-6 shadow-elegant space-y-4">
+                <View className="flex items-center justify-between">
+                  <Text className="text-lg font-bold text-card-foreground">命理总评</Text>
+                  {summary.score !== undefined && (
+                    <View className="flex items-center gap-2">
+                      <Text className="text-2xl font-bold text-primary">{summary.score}</Text>
+                      <Text className="text-sm text-muted-foreground">/ 10</Text>
+                    </View>
+                  )}
+                </View>
+                <Text className="text-card-foreground text-sm leading-relaxed">
+                  {summary.content || '命理总评生成中...'}
+                </Text>
+              </View>
+            </View>
+          )}
+
           <View className="px-8">
             <View className="bg-card rounded-lg overflow-hidden shadow-elegant">
               <View className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <Text className="text-foreground font-bold">运势K线图</Text>
+                <Text className="text-card-foreground font-bold">运势K线图</Text>
                 <View className="flex items-center gap-1 btn-press" onClick={toggleFullscreen}>
                   <View className={`i-mdi-${fullscreen ? 'fullscreen-exit' : 'fullscreen'} text-xl text-primary`} />
                   <Text className="text-primary text-sm">{fullscreen ? '退出全屏' : '全屏查看'}</Text>
@@ -193,10 +183,9 @@ export default function Chart() {
             </View>
           </View>
 
-          {/* 图例说明 */}
           <View className="px-8">
             <View className="bg-card rounded-lg p-4 space-y-3">
-              <Text className="text-foreground font-bold text-sm">图例说明</Text>
+              <Text className="text-card-foreground font-bold text-sm">图例说明</Text>
               <View className="flex items-center gap-4">
                 <View className="flex items-center gap-2">
                   <View className="w-4 h-4 rounded-sm" style={{backgroundColor: 'hsl(var(--chart-auspicious))'}} />
@@ -217,26 +206,33 @@ export default function Chart() {
             </View>
           </View>
 
-          {/* 操作按钮 */}
           <View className="px-8 space-y-4">
-            <View className="w-full py-4 rounded bg-primary text-center btn-press" onClick={viewReport}>
-              <Text className="text-primary-foreground font-bold">查看详细报告</Text>
-            </View>
-
+            <Button
+              className="w-full py-4 rounded-lg bg-primary text-primary-foreground break-keep text-base font-bold btn-press"
+              size="default"
+              onClick={viewReport}>
+              查看详细报告
+            </Button>
             <View className="flex gap-4">
-              <View
-                className="flex-1 py-4 rounded border border-border text-center btn-press"
+              <Button
+                className="flex-1 py-4 rounded-lg border border-border bg-card text-card-foreground break-keep text-base btn-press"
+                size="default"
                 onClick={handleRegenerate}>
-                <Text className="text-foreground">重新推演</Text>
-              </View>
-              <View
-                className={`flex-1 py-4 rounded text-center btn-press ${saving ? 'bg-muted' : 'bg-secondary'}`}
+                重新推演
+              </Button>
+              <Button
+                className={`flex-1 py-4 rounded-lg break-keep text-base btn-press ${saving ? 'bg-muted text-muted-foreground' : 'bg-secondary text-secondary-foreground'}`}
+                size="default"
                 onClick={saving ? undefined : handleSave}>
-                <Text className={saving ? 'text-muted-foreground' : 'text-secondary-foreground'}>
-                  {saving ? '保存中...' : '保存报告'}
-                </Text>
-              </View>
+                {saving ? '保存中...' : '保存报告'}
+              </Button>
             </View>
+            <Button
+              className="w-full py-4 rounded-lg border border-border bg-card text-card-foreground break-keep text-base btn-press"
+              size="default"
+              onClick={handleBack}>
+              返回首页
+            </Button>
           </View>
         </View>
       </ScrollView>

@@ -7,31 +7,58 @@ interface BaguaLoadingProps {
 export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingProps) {
   return (
     <View className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
-      {/* 八卦图 */}
+      {/* 八卦图 - 使用纯CSS实现 */}
       <View className="relative w-32 h-32 mb-8">
-        {/* 外圈 - 八卦符号 */}
+        {/* 外圈旋转 */}
         <View className="absolute inset-0 animate-bagua">
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            {/* 八卦外圈 */}
-            <circle cx="50" cy="50" r="45" fill="none" stroke="hsl(var(--primary))" strokeWidth="2" />
-
-            {/* 八个卦象位置的标记 */}
-            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, index) => {
-              const radian = (angle * Math.PI) / 180
-              const x = 50 + 40 * Math.cos(radian - Math.PI / 2)
-              const y = 50 + 40 * Math.sin(radian - Math.PI / 2)
-              return <circle key={index} cx={x} cy={y} r="3" fill="hsl(var(--primary))" />
-            })}
-
-            {/* 中心太极图 */}
-            <circle cx="50" cy="50" r="20" fill="hsl(var(--primary))" />
-            <path
-              d="M 50 30 A 10 10 0 0 1 50 50 A 10 10 0 0 0 50 70 A 20 20 0 0 1 50 30"
-              fill="hsl(var(--background))"
+          <View className="w-full h-full rounded-full border-2 border-primary relative">
+            {/* 八个卦象位置的标记点 */}
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '0%', left: '50%', transform: 'translate(-50%, -50%)'}}
             />
-            <circle cx="50" cy="40" r="3" fill="hsl(var(--background))" />
-            <circle cx="50" cy="60" r="3" fill="hsl(var(--primary))" />
-          </svg>
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '15%', left: '85%', transform: 'translate(-50%, -50%)'}}
+            />
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '50%', left: '100%', transform: 'translate(-50%, -50%)'}}
+            />
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '85%', left: '85%', transform: 'translate(-50%, -50%)'}}
+            />
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '100%', left: '50%', transform: 'translate(-50%, -50%)'}}
+            />
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '85%', left: '15%', transform: 'translate(-50%, -50%)'}}
+            />
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '50%', left: '0%', transform: 'translate(-50%, -50%)'}}
+            />
+            <View
+              className="absolute w-2 h-2 bg-primary rounded-full"
+              style={{top: '15%', left: '15%', transform: 'translate(-50%, -50%)'}}
+            />
+          </View>
+        </View>
+
+        {/* 中心太极图 */}
+        <View className="absolute inset-0 flex items-center justify-center">
+          <View className="w-16 h-16 rounded-full bg-primary relative overflow-hidden">
+            {/* 阴阳分界 */}
+            <View className="absolute top-0 left-0 w-full h-1/2 bg-background rounded-t-full" />
+            <View className="absolute top-1/4 left-1/4 w-2 h-2 bg-background rounded-full" />
+            <View
+              className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-primary rounded-full"
+              style={{backgroundColor: 'hsl(var(--background))'}}
+            />
+          </View>
         </View>
 
         {/* 内圈光晕 */}

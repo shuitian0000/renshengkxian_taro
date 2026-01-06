@@ -8,6 +8,7 @@ export interface KLineDataPoint {
   low: number
   score: number
   trend: string
+  description?: string
 }
 
 export interface DayunPeriod {
