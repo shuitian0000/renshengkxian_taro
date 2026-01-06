@@ -2,6 +2,7 @@ import {Button, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {useDidShow} from '@tarojs/taro'
 import {useCallback, useState} from 'react'
 import ReportCard from '@/components/ReportCard'
+import {generateAndSavePDF} from '@/utils/pdfGenerator'
 
 export default function Report() {
   const [reportData, setReportData] = useState<any>(null)
@@ -21,6 +22,20 @@ export default function Report() {
   const handleBack = useCallback(() => {
     Taro.navigateBack()
   }, [])
+
+  const handleDownload = useCallback(async () => {
+    if (!reportData) {
+      Taro.showToast({title: '数据加载中...', icon: 'none'})
+      return
+    }
+
+    await generateAndSavePDF({
+      name: reportData.name,
+      birthDate: reportData.birthDate,
+      birthTime: reportData.birthTime,
+      birthRegion: reportData.birthRegion
+    })
+  }, [reportData])
 
   if (!reportData) {
     return (
@@ -74,6 +89,13 @@ export default function Report() {
             </Text>
             <Text className="text-muted-foreground text-xs">人生运势受多种因素影响，建议理性看待，积极进取。</Text>
           </View>
+
+          <Button
+            className="w-full py-4 rounded-lg bg-accent text-accent-foreground break-keep text-base btn-press"
+            size="default"
+            onClick={handleDownload}>
+            下载报告长图
+          </Button>
 
           <Button
             className="w-full py-4 rounded-lg border border-border bg-card text-card-foreground break-keep text-base font-bold btn-press"

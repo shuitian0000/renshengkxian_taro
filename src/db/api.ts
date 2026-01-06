@@ -3,9 +3,6 @@ import {supabase} from '@/client/supabase'
 
 export interface Profile {
   id: string
-  username: string | null
-  email: string | null
-  phone: string | null
   openid: string | null
   nickname: string | null
   role: 'user' | 'admin'

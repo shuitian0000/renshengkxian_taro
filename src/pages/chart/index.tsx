@@ -4,6 +4,7 @@ import {useCallback, useState} from 'react'
 import {supabase} from '@/client/supabase'
 import KLineChart from '@/components/KLineChart'
 import {getCurrentUser, saveReport} from '@/db/api'
+import {generateAndSavePDF} from '@/utils/pdfGenerator'
 
 export default function Chart() {
   const [reportData, setReportData] = useState<any>(null)
@@ -125,6 +126,20 @@ export default function Chart() {
     })
   }, [reportData])
 
+  const handleDownload = useCallback(async () => {
+    if (!reportData) {
+      Taro.showToast({title: '数据加载中...', icon: 'none'})
+      return
+    }
+
+    await generateAndSavePDF({
+      name: reportData.name,
+      birthDate: reportData.birthDate,
+      birthTime: reportData.birthTime,
+      birthRegion: reportData.birthRegion
+    })
+  }, [reportData])
+
   const handleBack = useCallback(() => {
     Taro.switchTab({url: '/pages/index/index'})
   }, [])
@@ -227,6 +242,12 @@ export default function Chart() {
                 {saving ? '保存中...' : '保存报告'}
               </Button>
             </View>
+            <Button
+              className="w-full py-4 rounded-lg bg-accent text-accent-foreground break-keep text-base btn-press"
+              size="default"
+              onClick={handleDownload}>
+              下载报告长图
+            </Button>
             <Button
               className="w-full py-4 rounded-lg border border-border bg-card text-card-foreground break-keep text-base btn-press"
               size="default"

@@ -153,9 +153,7 @@ export default function ProfilePage() {
             {/* 用户信息卡片 */}
             <View className="bg-gradient-card rounded-lg p-8 shadow-elegant text-center space-y-4">
               <View className="i-mdi-account-circle text-8xl text-primary mx-auto" />
-              <Text className="text-foreground text-xl font-bold block">
-                {user.nickname || user.username || '用户'}
-              </Text>
+              <Text className="text-foreground text-xl font-bold block">{user.nickname || '用户'}</Text>
               <Text className="text-muted-foreground text-sm block">
                 {user.role === 'admin' ? '管理员' : '普通用户'}
               </Text>
