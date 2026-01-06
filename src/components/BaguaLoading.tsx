@@ -7,9 +7,9 @@ interface BaguaLoadingProps {
 export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingProps) {
   return (
     <View className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm">
-      {/* 八卦图 - 使用纯CSS实现 */}
+      {/* 八卦图 */}
       <View className="relative w-32 h-32 mb-8">
-        {/* 外圈旋转 */}
+        {/* 外圈旋转 - 八卦符号 */}
         <View className="absolute inset-0 animate-bagua">
           <View className="w-full h-full rounded-full border-2 border-primary relative">
             {/* 八个卦象位置的标记点 */}
@@ -52,27 +52,36 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
         <View className="absolute inset-0 flex items-center justify-center">
           <View
             className="w-20 h-20 rounded-full relative overflow-hidden animate-spin"
-            style={{animationDuration: '3s'}}>
-            {/* 阴阳分界 - S形曲线 */}
-            <View className="absolute inset-0 bg-primary" />
-            {/* 阳鱼（白色） */}
-            <View className="absolute top-0 right-0 w-1/2 h-full bg-background" />
-            <View className="absolute top-0 right-1/4 w-1/2 h-1/2 rounded-full bg-background" />
-            <View className="absolute bottom-0 left-1/4 w-1/2 h-1/2 rounded-full bg-primary" />
-            {/* 鱼眼 */}
+            style={{animationDuration: '3s', backgroundColor: 'hsl(var(--primary))'}}>
+            {/* 左半圆 - 白色（阳） */}
+            <View className="absolute left-0 top-0 w-1/2 h-full bg-background" />
+            {/* 上半部分的小圆 - 白色 */}
+            <View className="absolute left-1/4 top-0 w-1/2 h-1/2 rounded-full bg-background" />
+            {/* 下半部分的小圆 - 金色 */}
             <View
-              className="absolute w-3 h-3 rounded-full bg-primary"
-              style={{top: '25%', right: '25%', transform: 'translate(50%, -50%)'}}
+              className="absolute right-1/4 bottom-0 w-1/2 h-1/2 rounded-full"
+              style={{backgroundColor: 'hsl(var(--primary))'}}
             />
+            {/* 阳鱼眼 - 金色小点 */}
             <View
-              className="absolute w-3 h-3 rounded-full bg-background"
-              style={{bottom: '25%', left: '25%', transform: 'translate(-50%, 50%)'}}
+              className="absolute w-2.5 h-2.5 rounded-full"
+              style={{
+                backgroundColor: 'hsl(var(--primary))',
+                top: '25%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+              }}
+            />
+            {/* 阴鱼眼 - 白色小点 */}
+            <View
+              className="absolute w-2.5 h-2.5 rounded-full bg-background"
+              style={{bottom: '25%', left: '50%', transform: 'translate(-50%, 50%)'}}
             />
           </View>
         </View>
 
         {/* 内圈光晕 */}
-        <View className="absolute inset-0 flex items-center justify-center">
+        <View className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <View className="w-24 h-24 rounded-full bg-primary/10 animate-pulse" />
         </View>
       </View>

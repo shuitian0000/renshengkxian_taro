@@ -17,35 +17,81 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
   // 人生阶段判断
   let lifeStage = ''
   let stageAdvice = ''
+  let specificEvent = ''
+
   if (age <= 18) {
     lifeStage = '少年求学阶段'
-    stageAdvice = isAuspicious ? '学业运势旺盛，宜专注学习，打好基础' : '学业需加倍努力，切勿懈怠，多请教师长'
+    if (isAuspicious) {
+      stageAdvice = '学业运势旺盛，理解力强，记忆力佳'
+      specificEvent = age <= 12 ? '基础教育顺利，成绩优异' : '中学阶段表现突出，有望考入理想学府'
+    } else {
+      stageAdvice = '学业需加倍努力，注意力易分散'
+      specificEvent = age <= 12 ? '基础知识需巩固，多请教师长' : '学习压力较大，需调整方法，劳逸结合'
+    }
   } else if (age <= 30) {
     lifeStage = '青年创业阶段'
-    stageAdvice = isAuspicious ? '事业运势上扬，宜积极进取，把握机遇' : '事业发展受阻，宜稳扎稳打，积累经验'
+    if (isAuspicious) {
+      stageAdvice = '事业运势上扬，贵人相助，机遇频现'
+      specificEvent = age <= 25 ? '初入职场即展露才华，获上司赏识' : '事业上升期，适合跳槽或创业，财运亦佳'
+    } else {
+      stageAdvice = '事业发展受阻，竞争激烈，需沉淀积累'
+      specificEvent = age <= 25 ? '职场适应期较长，需多学习技能' : '事业遇瓶颈，宜稳扎稳打，避免冒进投资'
+    }
   } else if (age <= 45) {
     lifeStage = '中年发展阶段'
-    stageAdvice = isAuspicious ? '事业财运俱佳，宜大展宏图，开拓创新' : '运势起伏较大，宜谨慎决策，守成为主'
+    if (isAuspicious) {
+      stageAdvice = '事业财运俱佳，地位稳固，影响力扩大'
+      specificEvent =
+        age <= 38 ? '事业巅峰期，适合扩展业务，投资回报丰厚' : '成熟期，宜传承经验，培养团队，财富稳定增长'
+    } else {
+      stageAdvice = '运势起伏较大，需谨慎决策，守成为主'
+      specificEvent =
+        age <= 38 ? '事业压力增大，需平衡工作与家庭，避免过度扩张' : '进入调整期，宜保守理财，关注健康，减少应酬'
+    }
   } else if (age <= 60) {
     lifeStage = '成熟稳定阶段'
-    stageAdvice = isAuspicious ? '运势平稳向好，宜传承经验，培养后进' : '健康需多关注，宜修身养性，平和心态'
+    if (isAuspicious) {
+      stageAdvice = '运势平稳向好，经验丰富，受人尊重'
+      specificEvent =
+        age <= 52 ? '事业稳定，收入可观，宜规划退休生活' : '逐步交接工作，享受生活，子女事业有成，家庭和睦'
+    } else {
+      stageAdvice = '健康需多关注，心态宜平和，减少劳累'
+      specificEvent =
+        age <= 52 ? '工作压力仍大，需注意身体信号，定期体检' : '退休过渡期，需调整心态，培养兴趣爱好，多陪伴家人'
+    }
   } else {
     lifeStage = '晚年颐养阶段'
-    stageAdvice = isAuspicious ? '福寿安康，宜享天伦之乐，颐养天年' : '注意身体保养，宜清心寡欲，安度晚年'
+    if (isAuspicious) {
+      stageAdvice = '福寿安康，儿孙绕膝，晚年幸福'
+      specificEvent = age <= 70 ? '身体硬朗，精神矍铄，享受天伦之乐' : '高寿之年，心态平和，子孙孝顺，安度晚年'
+    } else {
+      stageAdvice = '注意身体保养，心态宜平和，清心寡欲'
+      specificEvent = age <= 70 ? '健康需重点关注，适度运动，清淡饮食' : '身体机能下降，需家人照料，保持乐观心态'
+    }
   }
 
-  // 五行分析
-  const wuxingAnalysis = isAuspicious
-    ? '五行流转顺畅，天时地利人和，诸事易成'
-    : '五行相克较重，需注意调和阴阳，化解不利'
-
-  // 社会环境分析
-  const socialAnalysis = isAuspicious
-    ? '所处时代环境有利，社会发展趋势向好，顺势而为可获成功'
-    : '外部环境存在挑战，需审时度势，避免冒进，以守为攻'
+  // 五行分析（根据评分细化）
+  let wuxingAnalysis = ''
+  if (isAuspicious) {
+    if (score >= 8) {
+      wuxingAnalysis = '五行流转极为顺畅，金木水火土相生相助，天时地利人和，诸事易成'
+    } else if (score >= 7) {
+      wuxingAnalysis = '五行平衡良好，气场和谐，运势稳步上升，顺势而为可获成功'
+    } else {
+      wuxingAnalysis = '五行基本平衡，略有波动，整体向好，需把握时机'
+    }
+  } else {
+    if (score < 4) {
+      wuxingAnalysis = '五行相克严重，气场紊乱，需调和阴阳，化解不利，宜求助专业人士'
+    } else if (score < 5) {
+      wuxingAnalysis = '五行失衡较重，运势受阻，需注意调整心态，避免冲动决策'
+    } else {
+      wuxingAnalysis = '五行略有相克，运势起伏，需谨慎行事，以守为攻'
+    }
+  }
 
   // 综合分析
-  return `【${lifeStage}】${stageAdvice}。【命理分析】${wuxingAnalysis}。【环境因素】${socialAnalysis}。综合评分${score.toFixed(1)}分，运势${trend === '吉' ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇' : '谨慎行事，蓄势待发'}。`
+  return `【${lifeStage}】${specificEvent}。${stageAdvice}。【五行命理】${wuxingAnalysis}。【综合评分】${score.toFixed(1)}分，运势${isAuspicious ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇，顺势而为' : '谨慎行事，蓄势待发，修身养性'}。`
 }
 
 export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLineChartProps) {
@@ -134,7 +180,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLi
             const closeY = getYPosition(point.close)
             const highY = getYPosition(point.high)
             const lowY = getYPosition(point.low)
-            // 使用trend字段判断吉凶，而不是close和open的比较
+            // 使用trend字段判断吉凶
             const isAuspicious = point.trend === '吉'
             const color = isAuspicious ? 'hsl(var(--chart-auspicious))' : 'hsl(var(--chart-inauspicious))'
             const bodyHeight = Math.abs(closeY - openY)

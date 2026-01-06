@@ -20,32 +20,31 @@ export interface DayunPeriod {
 /**
  * 天干地支
  */
-const TIAN_GAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']
-const DI_ZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
+const TIANGAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']
+const DIZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
 
 /**
- * 根据出生年份生成大运周期
+ * 根据出生年份计算大运周期
  */
 export function generateDayunPeriods(birthYear: number): DayunPeriod[] {
   const periods: DayunPeriod[] = []
-  const startAge = 5
-  const endAge = 85
-  const periodLength = 10
+  const startAge = 8 // 大运从8岁开始
+  const periodLength = 10 // 每个大运10年
 
-  // 根据出生年份计算起始天干地支
-  const yearIndex = (birthYear - 1900) % 60
-  const tianGanIndex = yearIndex % 10
-  const diZhiIndex = yearIndex % 12
+  // 根据出生年份确定起始天干地支
+  const yearOffset = (birthYear - 1900) % 60
+  const tianganIndex = yearOffset % 10
+  const dizhiIndex = yearOffset % 12
 
-  for (let age = startAge; age < endAge; age += periodLength) {
-    const periodIndex = Math.floor((age - startAge) / periodLength)
-    const currentTianGan = TIAN_GAN[(tianGanIndex + periodIndex) % 10]
-    const currentDiZhi = DI_ZHI[(diZhiIndex + periodIndex) % 12]
+  for (let i = 0; i < 8; i++) {
+    const age = startAge + i * periodLength
+    const tg = TIANGAN[(tianganIndex + i) % 10]
+    const dz = DIZHI[(dizhiIndex + i) % 12]
 
     periods.push({
       startAge: age,
-      endAge: Math.min(age + periodLength - 1, endAge),
-      ganZhi: `${currentTianGan}${currentDiZhi}`
+      endAge: age + periodLength - 1,
+      ganZhi: `${tg}${dz}`
     })
   }
 
@@ -53,7 +52,7 @@ export function generateDayunPeriods(birthYear: number): DayunPeriod[] {
 }
 
 /**
- * 生成K线图数据（本地算法）
+ * 生成本地K线数据
  */
 export function generateLocalKLineData(birthYear: number, birthMonth: number): KLineDataPoint[] {
   const data: KLineDataPoint[] = []
@@ -89,18 +88,27 @@ export function generateLocalKLineData(birthYear: number, birthMonth: number): K
     const low = Math.min(open, close) - random3 * volatility
     const score = (open + close + high + low) / 4
 
-    // 生成趋势描述
+    // 生成吉凶趋势（简化为"吉"或"凶"）
     let trend = ''
-    if (score >= 7.5) {
-      trend = '运势极佳，诸事顺遂'
-    } else if (score >= 6.5) {
-      trend = '运势良好，稳步前进'
-    } else if (score >= 5.5) {
-      trend = '运势平稳，波澜不惊'
-    } else if (score >= 4.5) {
-      trend = '运势一般，需谨慎行事'
+    let description = ''
+    if (score >= 6) {
+      trend = '吉'
+      if (score >= 8) {
+        description = '运势极佳，诸事顺遂，宜积极进取，把握良机。'
+      } else if (score >= 7) {
+        description = '运势良好，稳步前进，宜顺势而为，开拓创新。'
+      } else {
+        description = '运势平稳向好，波澜不惊，宜稳扎稳打，步步为营。'
+      }
     } else {
-      trend = '运势欠佳，宜守不宜攻'
+      trend = '凶'
+      if (score < 4) {
+        description = '运势欠佳，多有波折，宜守不宜攻，谨慎行事。'
+      } else if (score < 5) {
+        description = '运势一般，需谨慎决策，宜以守为攻，蓄势待发。'
+      } else {
+        description = '运势起伏较大，需注意调整，宜修身养性，平和心态。'
+      }
     }
 
     data.push({
@@ -110,7 +118,8 @@ export function generateLocalKLineData(birthYear: number, birthMonth: number): K
       high: Number(Math.min(10, high).toFixed(1)),
       low: Number(Math.max(0, low).toFixed(1)),
       score: Number(score.toFixed(1)),
-      trend
+      trend,
+      description
     })
   }
 
@@ -130,36 +139,36 @@ export function generateLocalReport(name: string, birthYear: number) {
 
   return {
     summary: {
-      content: `${name}命格分析：根据出生年份推算，您的命格属于中上之选。一生运势起伏有致，青年时期需努力奋斗，中年后渐入佳境。性格坚韧，意志坚定，能够克服困难，最终成就一番事业。建议把握机遇，稳扎稳打，方能功成名就。`,
-      score: random(1)
+      score: random(1),
+      content: `${name}命格中正平和，五行流转有序。一生运势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年福寿安康。性格坚韧不拔，处事稳重，善于把握机遇。建议顺应天时，积极进取，必能成就一番事业。`
     },
     personality: {
-      content: `性格特征：您性格沉稳内敛，做事谨慎细致，不轻易表露情感。具有较强的责任心和使命感，对待工作认真负责。善于思考，富有智慧，能够洞察事物本质。但有时过于谨慎，容易错失良机。建议适当放开手脚，勇于尝试，方能发挥潜能。`,
-      score: random(2)
+      score: random(2),
+      content: `性格沉稳内敛，做事有条不紊。待人真诚，重情重义，朋友众多。思维缜密，善于分析，决策果断。但有时过于谨慎，需要更多勇气突破自我。`
     },
     career: {
-      content: `事业运势：事业方面，您具有较强的进取心和执行力，能够在工作中取得不错的成绩。适合从事需要耐心和细致的工作，如管理、财务、技术等领域。中年后事业运势渐旺，有望晋升高位。建议把握机遇，积累经验，稳步前进。`,
-      score: random(3)
-    },
-    fengshui: {
-      content: `风水建议：居住环境宜选择坐北朝南、采光充足的房屋。办公室或书房宜摆放文昌塔、书籍等物品，有助于提升事业运。卧室宜保持整洁，避免杂物堆积。家中可摆放绿植，增添生气。出行方位以东方、南方为吉，有助于提升运势。`,
-      score: random(4)
+      score: random(3),
+      content: `事业运势稳中有升，适合从事管理、金融、教育等行业。早年需积累经验，中年后事业有成。贵人相助，机遇不断，但需把握时机，积极进取。`
     },
     wealth: {
-      content: `财富运势：财运方面，您属于稳健型，不会有暴富机会，但也不会有大的破财。收入稳定，善于理财，能够积累财富。中年后财运渐旺，有望通过投资获得收益。建议保持理性，避免冒险投资，稳健为上。`,
-      score: random(5)
+      score: random(4),
+      content: `财运亨通，正财稳定，偏财有机。善于理财，财富积累稳健。中年后财运更佳，但需注意投资风险，切勿贪心。量入为出，财富自然丰盈。`
     },
     marriage: {
-      content: `婚姻感情：感情方面，您对待感情认真专一，不会轻易动心。适合晚婚，婚后生活和睦。配偶性格温和，能够相互扶持。建议多沟通交流，增进感情，共同经营美好家庭。子女运佳，儿女孝顺，晚年幸福。`,
-      score: random(6)
+      score: random(5),
+      content: `婚姻运势良好，配偶贤惠，家庭和睦。感情专一，夫妻恩爱，子女孝顺。但需注意沟通，避免误会。相互理解，白头偕老。`
     },
     health: {
-      content: `健康状况：健康方面，您体质较好,但需注意劳逸结合。青年时期精力充沛，中年后需注意保养。易患消化系统、呼吸系统疾病，建议定期体检，保持良好作息。适当运动，保持心情愉悦，有助于延年益寿。`,
-      score: random(7)
+      score: random(6),
+      content: `身体健康，精力充沛。但需注意劳逸结合，避免过度劳累。中年后需关注心血管健康，定期体检。保持良好作息，适度运动，可保长寿。`
     },
     family: {
-      content: `六亲关系：与父母关系融洽，能够得到家庭支持。兄弟姐妹之间感情深厚，相互帮助。子女孝顺，晚年享福。与长辈相处和睦，能够得到贵人相助。建议多关心家人，维系亲情，家和万事兴。`,
-      score: random(8)
+      score: random(7),
+      content: `六亲和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。家族兴旺，福泽绵长。但需多陪伴家人，珍惜天伦之乐。`
+    },
+    fengshui: {
+      score: random(8),
+      content: `宜居东南方位，有利事业发展。家中宜摆放绿植，增旺生气。卧室宜简洁明亮，有助睡眠。办公桌宜面向窗户，采光充足。注意家居整洁，气场流通。`
     }
   }
 }
