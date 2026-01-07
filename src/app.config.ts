@@ -37,7 +37,7 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#F5F0E6',
-    navigationBarTitleText: '人生K线图',
+    navigationBarTitleText: '人生K线图谱',
     navigationBarTextStyle: 'black'
   }
 })

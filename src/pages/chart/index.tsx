@@ -136,7 +136,9 @@ export default function Chart() {
       name: reportData.name,
       birthDate: reportData.birthDate,
       birthTime: reportData.birthTime,
-      birthRegion: reportData.birthRegion
+      birthRegion: reportData.birthRegion,
+      klineData: reportData.klineData,
+      reportData: reportData.reportData
     })
   }, [reportData])
 
@@ -159,7 +161,7 @@ export default function Chart() {
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="space-y-6 pb-8">
           <View className="bg-gradient-card px-8 py-6 space-y-2">
-            <Text className="text-2xl font-bold text-foreground">{reportData.name}的人生K线图</Text>
+            <Text className="text-2xl font-bold text-foreground">{reportData.name}的人生K线图谱</Text>
             <Text className="text-muted-foreground text-sm">
               出生日期：{reportData.birthDate} {reportData.birthTime}
             </Text>

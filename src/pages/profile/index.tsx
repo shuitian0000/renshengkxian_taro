@@ -184,7 +184,7 @@ export default function ProfilePage() {
 
             {/* 版权信息 */}
             <View className="text-center space-y-2">
-              <Text className="text-muted-foreground text-xs block">© 2026 人生K线图</Text>
+              <Text className="text-muted-foreground text-xs block">© 2026 人生K线图谱</Text>
               <Text className="text-muted-foreground text-xs block">基于传统命理，洞察人生运势</Text>
             </View>
           </View>
@@ -274,7 +274,7 @@ export default function ProfilePage() {
 
           {/* 版权信息 */}
           <View className="text-center space-y-2">
-            <Text className="text-muted-foreground text-xs block">© 2026 人生K线图</Text>
+            <Text className="text-muted-foreground text-xs block">© 2026 人生K线图谱</Text>
             <Text className="text-muted-foreground text-xs block">基于传统命理，洞察人生运势</Text>
           </View>
         </View>

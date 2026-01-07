@@ -33,7 +33,9 @@ export default function Report() {
       name: reportData.name,
       birthDate: reportData.birthDate,
       birthTime: reportData.birthTime,
-      birthRegion: reportData.birthRegion
+      birthRegion: reportData.birthRegion,
+      klineData: reportData.klineData,
+      reportData: reportData.reportData
     })
   }, [reportData])
 

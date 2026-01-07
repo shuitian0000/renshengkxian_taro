@@ -127,7 +127,7 @@ export default function Index() {
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="px-6 py-8">
           <View className="text-center mb-8">
-            <Text className="text-3xl font-bold gradient-text block mb-2">人生K线图</Text>
+            <Text className="text-3xl font-bold gradient-text block mb-2">人生K线图谱</Text>
             <Text className="text-sm text-muted-foreground">天机推演 · 命理分析</Text>
           </View>
           <View className="bg-card rounded-lg p-6 mb-6 shadow-elegant">
