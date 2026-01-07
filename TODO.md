@@ -24,7 +24,7 @@
 - [x] 21. 修改登录逻辑为仅支持微信登录（移除用户名密码登录）
 - [x] 22. 添加微信授权说明和隐私保护提示
 - [x] 23. 简化数据库表结构（删除username、email、phone字段）
-- [x] 24. 添加Canvas绘制PDF功能（绘制完整报告长图并保存到相册）
+- [x] 24. 修复Canvas绘制PDF功能（使用Taro.createCanvasContext和页面Canvas元素）
 - [x] 25. 修改应用名称为"人生K线图谱"
 
 ## 待完成改进
@@ -36,7 +36,7 @@
 - 分析依据生成：根据年龄划分人生阶段（≤18少年求学、≤30青年创业、≤45中年发展、≤60成熟稳定、>60晚年颐养），结合评分细化五行分析，生成具体事件描述，避免套话
 - 微信登录：使用Taro.getUserProfile()获取用户昵称和头像，Taro.login()获取code，调用后端Edge Function完成登录，仅支持微信小程序环境
 - 数据库优化：profiles表只保留id、openid、nickname、role、created_at字段，删除不必要的username、email、phone字段
-- Canvas绘制PDF：使用Taro.createOffscreenCanvas创建离屏Canvas，绘制标题、基本信息、K线图（含网格线、图例）、各章节报告内容、免责声明，自动换行处理长文本，使用toDataURL导出图片，通过saveImageToPhotosAlbum保存到相册
+- Canvas绘制PDF：在页面中添加隐藏Canvas元素（canvasId="reportCanvas"），使用Taro.createCanvasContext创建上下文，绘制标题、基本信息、K线图（含网格线、图例）、各章节报告内容、免责声明，实现文本自动换行（估算中英文字符宽度），使用ctx.draw()绘制后调用Taro.canvasToTempFilePath导出图片，通过Taro.saveImageToPhotosAlbum保存到相册
 - 应用名称：统一使用"人生K线图谱"
 - 横竖屏适配：监听屏幕方向变化，动态调整K线图布局
 - 返回按钮：使用Taro.navigateBack()实现页面返回

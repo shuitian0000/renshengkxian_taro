@@ -28,54 +28,55 @@ interface ReportData {
 export async function generateAndSavePDF(reportData: ReportData): Promise<boolean> {
   try {
     // 请求保存到相册的权限
-    const authResult = await Taro.getSetting()
-    if (!authResult.authSetting['scope.writePhotosAlbum']) {
-      try {
+    try {
+      const authResult = await Taro.getSetting()
+      if (!authResult.authSetting['scope.writePhotosAlbum']) {
         await Taro.authorize({scope: 'scope.writePhotosAlbum'})
-      } catch (_authError) {
-        // 用户拒绝授权，引导去设置
-        const modalRes = await Taro.showModal({
-          title: '需要授权',
-          content: '需要您授权保存图片到相册，才能保存报告',
-          confirmText: '去设置',
-          cancelText: '取消'
-        })
-        if (modalRes.confirm) {
-          await Taro.openSetting()
-        }
-        return false
       }
+    } catch (_authError) {
+      // 用户拒绝授权，引导去设置
+      const modalRes = await Taro.showModal({
+        title: '需要授权',
+        content: '需要您授权保存图片到相册，才能保存报告',
+        confirmText: '去设置',
+        cancelText: '取消'
+      })
+      if (modalRes.confirm) {
+        await Taro.openSetting()
+      }
+      return false
     }
 
     Taro.showLoading({title: '生成中...', mask: true})
 
-    // 创建离屏Canvas
-    const canvas: any = Taro.createOffscreenCanvas({type: '2d', width: 750, height: 4000})
-    const ctx: any = canvas.getContext('2d')
-    if (!ctx) {
-      throw new Error('无法创建Canvas上下文')
-    }
+    // 获取系统信息
+    const systemInfo = Taro.getSystemInfoSync()
+    const dpr = systemInfo.pixelRatio || 2
+    const canvasWidth = 750
+    const canvasHeight = 5000
+
+    // 创建Canvas上下文
+    const ctx = Taro.createCanvasContext('reportCanvas')
 
     // 设置Canvas尺寸
-    const width = 750
     let currentY = 0
 
     // 绘制背景
-    ctx.fillStyle = '#1A1A1A'
-    ctx.fillRect(0, 0, width, 4000)
+    ctx.setFillStyle('#1A1A1A')
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
     // 绘制标题
     currentY = 60
-    ctx.fillStyle = '#D4AF37'
-    ctx.font = 'bold 48px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText('人生K线图谱命理报告', width / 2, currentY)
+    ctx.setFillStyle('#D4AF37')
+    ctx.setFontSize(48)
+    ctx.setTextAlign('center')
+    ctx.fillText('人生K线图谱命理报告', canvasWidth / 2, currentY)
     currentY += 80
 
     // 绘制基本信息
-    ctx.fillStyle = '#F5F0E6'
-    ctx.font = '28px sans-serif'
-    ctx.textAlign = 'left'
+    ctx.setFillStyle('#F5F0E6')
+    ctx.setFontSize(28)
+    ctx.setTextAlign('left')
     ctx.fillText(`姓名：${reportData.name}`, 60, currentY)
     currentY += 50
     ctx.fillText(`出生日期：${reportData.birthDate} ${reportData.birthTime}`, 60, currentY)
@@ -84,7 +85,7 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
     currentY += 80
 
     // 绘制K线图
-    currentY = drawKLineChart(ctx, reportData.klineData, 60, currentY, width - 120)
+    currentY = drawKLineChart(ctx, reportData.klineData, 60, currentY, canvasWidth - 120)
     currentY += 80
 
     // 绘制命理报告各章节
@@ -100,22 +101,20 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
     ]
 
     for (const section of sections) {
-      currentY = drawReportSection(ctx, section.title, section.data, 60, currentY, width - 120)
+      currentY = drawReportSection(ctx, section.title, section.data, 60, currentY, canvasWidth - 120)
     }
 
     // 绘制免责声明
     currentY += 40
-    ctx.fillStyle = '#D4AF37'
-    ctx.font = 'bold 24px sans-serif'
+    ctx.setFillStyle('#D4AF37')
+    ctx.setFontSize(24)
     ctx.fillText('免责声明', 60, currentY)
     currentY += 40
-    ctx.fillStyle = '#B3B3B3'
-    ctx.font = '20px sans-serif'
-    const disclaimerLines = wrapText(
-      ctx,
-      '本报告基于中国传统命理学理论生成，仅供参考娱乐，不构成任何决策依据。人生运势受多种因素影响，建议理性看待，积极进取。',
-      width - 120
-    )
+    ctx.setFillStyle('#B3B3B3')
+    ctx.setFontSize(20)
+    const disclaimerText =
+      '本报告基于中国传统命理学理论生成，仅供参考娱乐，不构成任何决策依据。人生运势受多种因素影响，建议理性看待，积极进取。'
+    const disclaimerLines = wrapText(ctx, disclaimerText, canvasWidth - 120, 20)
     for (const line of disclaimerLines) {
       ctx.fillText(line, 60, currentY)
       currentY += 35
@@ -123,27 +122,52 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
 
     currentY += 60
 
-    // 调整Canvas实际高度
-    const finalHeight = currentY
-    const finalCanvas: any = Taro.createOffscreenCanvas({type: '2d', width, height: finalHeight})
-    const finalCtx: any = finalCanvas.getContext('2d')
-    if (finalCtx) {
-      finalCtx.drawImage(canvas, 0, 0)
-    }
+    // 绘制到Canvas
+    ctx.draw(false, async () => {
+      try {
+        // 导出图片
+        const res = await Taro.canvasToTempFilePath({
+          canvasId: 'reportCanvas',
+          destWidth: canvasWidth * dpr,
+          destHeight: currentY * dpr,
+          width: canvasWidth,
+          height: currentY
+        })
 
-    // 导出图片
-    const tempFilePath = finalCanvas.toDataURL()
+        // 保存到相册
+        await Taro.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath
+        })
 
-    // 保存到相册
-    await Taro.saveImageToPhotosAlbum({
-      filePath: tempFilePath
-    })
+        Taro.hideLoading()
+        Taro.showToast({
+          title: '已保存到相册',
+          icon: 'success',
+          duration: 2000
+        })
+      } catch (saveError: any) {
+        console.error('保存图片失败:', saveError)
+        Taro.hideLoading()
 
-    Taro.hideLoading()
-    Taro.showToast({
-      title: '已保存到相册',
-      icon: 'success',
-      duration: 2000
+        if (saveError.errMsg?.includes('auth deny')) {
+          Taro.showModal({
+            title: '需要授权',
+            content: '请授权保存图片到相册',
+            confirmText: '去设置',
+            success: (res) => {
+              if (res.confirm) {
+                Taro.openSetting()
+              }
+            }
+          })
+        } else {
+          Taro.showToast({
+            title: `保存失败：${saveError.errMsg || '未知错误'}`,
+            icon: 'none',
+            duration: 3000
+          })
+        }
+      }
     })
 
     return true
@@ -151,24 +175,11 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
     console.error('生成报告失败:', error)
     Taro.hideLoading()
 
-    if (error.errMsg?.includes('saveImageToPhotosAlbum:fail auth deny')) {
-      Taro.showModal({
-        title: '需要授权',
-        content: '请授权保存图片到相册',
-        confirmText: '去设置',
-        success: (res) => {
-          if (res.confirm) {
-            Taro.openSetting()
-          }
-        }
-      })
-    } else {
-      Taro.showToast({
-        title: error.message || '生成失败，请重试',
-        icon: 'none',
-        duration: 2000
-      })
-    }
+    Taro.showToast({
+      title: `生成失败：${error.message || error.errMsg || '未知错误'}`,
+      icon: 'none',
+      duration: 3000
+    })
 
     return false
   }
@@ -182,19 +193,19 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
   const chartWidth = width
 
   // 绘制标题
-  ctx.fillStyle = '#D4AF37'
-  ctx.font = 'bold 32px sans-serif'
-  ctx.textAlign = 'left'
+  ctx.setFillStyle('#D4AF37')
+  ctx.setFontSize(32)
+  ctx.setTextAlign('left')
   ctx.fillText('运势K线图', x, y)
   y += 50
 
   // 绘制K线图背景
-  ctx.fillStyle = '#2A2A2A'
+  ctx.setFillStyle('#2A2A2A')
   ctx.fillRect(x, y, chartWidth, chartHeight)
 
   // 绘制网格线
-  ctx.strokeStyle = '#3A3A3A'
-  ctx.lineWidth = 1
+  ctx.setStrokeStyle('#3A3A3A')
+  ctx.setLineWidth(1)
   for (let i = 0; i <= 10; i += 2) {
     const gridY = y + (chartHeight * (10 - i)) / 10
     ctx.beginPath()
@@ -203,9 +214,9 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
     ctx.stroke()
 
     // 绘制Y轴标签
-    ctx.fillStyle = '#B3B3B3'
-    ctx.font = '20px sans-serif'
-    ctx.textAlign = 'right'
+    ctx.setFillStyle('#B3B3B3')
+    ctx.setFontSize(20)
+    ctx.setTextAlign('right')
     ctx.fillText(i.toString(), x - 10, gridY + 7)
   }
 
@@ -219,9 +230,10 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
     const lowY = y + chartHeight - (point.low / 10) * chartHeight
 
     const isAuspicious = point.trend === '吉'
-    ctx.fillStyle = isAuspicious ? '#D4AF37' : '#8B0000'
-    ctx.strokeStyle = isAuspicious ? '#D4AF37' : '#8B0000'
-    ctx.lineWidth = 1
+    const color = isAuspicious ? '#D4AF37' : '#8B0000'
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    ctx.setLineWidth(1)
 
     // 绘制上影线
     ctx.beginPath()
@@ -242,25 +254,25 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
 
     // 绘制年龄标签（每10岁标注一次）
     if (index % 10 === 0) {
-      ctx.fillStyle = '#B3B3B3'
-      ctx.font = '18px sans-serif'
-      ctx.textAlign = 'center'
+      ctx.setFillStyle('#B3B3B3')
+      ctx.setFontSize(18)
+      ctx.setTextAlign('center')
       ctx.fillText(point.age.toString(), barX, y + chartHeight + 25)
     }
   })
 
   // 绘制图例
   const legendY = y + chartHeight + 50
-  ctx.fillStyle = '#D4AF37'
+  ctx.setFillStyle('#D4AF37')
   ctx.fillRect(x, legendY, 20, 10)
-  ctx.fillStyle = '#F5F0E6'
-  ctx.font = '20px sans-serif'
-  ctx.textAlign = 'left'
+  ctx.setFillStyle('#F5F0E6')
+  ctx.setFontSize(20)
+  ctx.setTextAlign('left')
   ctx.fillText('吉运', x + 30, legendY + 10)
 
-  ctx.fillStyle = '#8B0000'
+  ctx.setFillStyle('#8B0000')
   ctx.fillRect(x + 120, legendY, 20, 10)
-  ctx.fillStyle = '#F5F0E6'
+  ctx.setFillStyle('#F5F0E6')
   ctx.fillText('凶运', x + 150, legendY + 10)
 
   return legendY + 40
@@ -278,16 +290,16 @@ function drawReportSection(
   width: number
 ): number {
   // 绘制标题和评分
-  ctx.fillStyle = '#D4AF37'
-  ctx.font = 'bold 28px sans-serif'
-  ctx.textAlign = 'left'
+  ctx.setFillStyle('#D4AF37')
+  ctx.setFontSize(28)
+  ctx.setTextAlign('left')
   ctx.fillText(`${title}（评分：${data.score.toFixed(1)}）`, x, y)
   y += 50
 
   // 绘制内容（自动换行）
-  ctx.fillStyle = '#F5F0E6'
-  ctx.font = '22px sans-serif'
-  const lines = wrapText(ctx, data.content, width - 40)
+  ctx.setFillStyle('#F5F0E6')
+  ctx.setFontSize(22)
+  const lines = wrapText(ctx, data.content, width - 40, 22)
   for (const line of lines) {
     ctx.fillText(line, x + 20, y)
     y += 35
@@ -299,17 +311,33 @@ function drawReportSection(
 
 /**
  * 文本自动换行
+ * 注意：Taro的Canvas不支持measureText，需要估算字符宽度
  */
-function wrapText(ctx: any, text: string, maxWidth: number): string[] {
+function wrapText(_ctx: any, text: string, maxWidth: number, fontSize: number): string[] {
   const lines: string[] = []
   let currentLine = ''
+
+  // 估算每个字符的宽度（中文字符约等于fontSize，英文约为fontSize/2）
+  const estimateWidth = (str: string): number => {
+    let width = 0
+    for (let i = 0; i < str.length; i++) {
+      const char = str[i]
+      // 判断是否为中文字符
+      if (/[\u4e00-\u9fa5]/.test(char)) {
+        width += fontSize
+      } else {
+        width += fontSize / 2
+      }
+    }
+    return width
+  }
 
   for (let i = 0; i < text.length; i++) {
     const char = text[i]
     const testLine = currentLine + char
-    const metrics = ctx.measureText(testLine)
+    const testWidth = estimateWidth(testLine)
 
-    if (metrics.width > maxWidth && currentLine.length > 0) {
+    if (testWidth > maxWidth && currentLine.length > 0) {
       lines.push(currentLine)
       currentLine = char
     } else {

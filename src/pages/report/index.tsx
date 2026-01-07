@@ -1,4 +1,4 @@
-import {Button, ScrollView, Text, View} from '@tarojs/components'
+import {Button, Canvas, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {useDidShow} from '@tarojs/taro'
 import {useCallback, useState} from 'react'
 import ReportCard from '@/components/ReportCard'
@@ -107,6 +107,9 @@ export default function Report() {
           </Button>
         </View>
       </ScrollView>
+
+      {/* 隐藏的Canvas用于生成报告长图 */}
+      <Canvas canvasId="reportCanvas" style={{position: 'fixed', left: '-9999px', width: '750px', height: '5000px'}} />
     </View>
   )
 }
