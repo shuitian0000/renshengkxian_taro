@@ -94,7 +94,7 @@ export default function ChartFullscreen() {
           className="bg-accent/90 text-accent-foreground px-5 py-3 rounded-full border border-border break-keep text-sm btn-press shadow-lg"
           size="mini"
           onClick={handleExit}>
-          退出
+          退出全屏
         </Button>
       </View>
     </View>

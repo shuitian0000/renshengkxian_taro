@@ -41,6 +41,8 @@
 - [x] 38. 优化全屏模式图表高度（chartHeight从600/700降低到450/550，使图表更紧凑，更好地适配屏幕尺寸）
 - [x] 39. 进一步优化全屏弹窗尺寸（弹窗宽度改为max-w-xs，padding从p-6改为p-4，外层padding从24px改为16px，隐藏分析依据，运势分析限制2行）
 - [x] 40. 进一步降低全屏图表高度（chartHeight从450/550降低到350/450，使图表更加紧凑）
+- [x] 41. 优化全屏弹窗内容显示（添加ScrollView支持滚动查看所有内容，恢复显示分析依据，移除文本行数限制，弹窗maxHeight为80vh）
+- [x] 42. 修改全屏退出按钮文字（从"退出"改为"退出全屏"，更明确功能）
 
 ## 待完成改进
 无
@@ -53,10 +55,10 @@
 - 数据库优化：profiles表只保留id、openid、nickname、role、created_at字段，删除不必要的username、email、phone字段
 - Canvas绘制PDF：在页面中添加隐藏Canvas元素（canvasId="reportCanvas"），使用Taro.createCanvasContext创建上下文，绘制标题、基本信息、K线图（含网格线、图例）、各章节报告内容、免责声明，实现文本自动换行（估算中英文字符宽度），使用ctx.draw()绘制后调用Taro.canvasToTempFilePath导出图片，通过Taro.saveImageToPhotosAlbum保存到相册
 - 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏
-- 全屏控制按钮：横向排列固定在底部中央（bottom-4 left-1/2 transform: translateX(-50%)），包含放大、缩小、重置、退出四个圆形按钮（rounded-full），使用shadow-lg增强视觉效果，不遮挡K线图内容
+- 全屏控制按钮：横向排列固定在底部中央（bottom-4 left-1/2 transform: translateX(-50%)），包含放大、缩小、重置、退出全屏四个圆形按钮（rounded-full），使用shadow-lg增强视觉效果，不遮挡K线图内容
 - K线图缩放功能：在KLineChart组件中添加scale参数（默认1），通过调整barSpacing（30 * scale）和chartWidth（data.length * 30 * scale）实现图表内容的真实缩放，全屏模式默认0.8倍便于查看全图，支持0.3-3倍缩放范围，步长0.3
 - K线图容器优化：chartHeight根据模式动态调整（全屏横屏350、全屏竖屏450、非全屏横屏300、非全屏竖屏400），ScrollView启用垂直滚动（scrollY={true}），全屏模式底部padding 80px避免按钮遮挡，底部增加40px空间（minHeight: chartHeight + 40），确保横轴年龄数字和所有K线内容完整显示且可点击
-- 运势解析弹窗：点击K线显示运势详情，全屏模式下弹窗宽度为max-w-xs（更小）、padding为p-4（更紧凑）、外层padding为16px、隐藏分析依据部分、运势分析限制2行、标题字体为text-base、评分字体为text-xl，非全屏模式为max-w-md、padding为p-6、外层padding为24px、显示完整内容，确保弹窗紧凑且关闭按钮（右上角X图标）始终可见，点击背景或关闭按钮可关闭弹窗
+- 运势解析弹窗：点击K线显示运势详情，全屏模式下弹窗宽度为max-w-xs、padding为p-4、外层padding为16px、maxHeight为80vh、内容区域使用ScrollView支持滚动（maxHeight: calc(80vh - 120px)）、显示完整内容包括分析依据、标题字体为text-base、评分字体为text-xl，非全屏模式为max-w-md、padding为p-6、外层padding为24px、显示完整内容，确保弹窗紧凑且关闭按钮（右上角X图标）始终可见，用户可以滚动查看所有内容，点击背景或关闭按钮可关闭弹窗
 - 应用名称：统一使用"人生K线图谱"
 - 返回按钮：使用Taro.navigateBack()实现页面返回
 

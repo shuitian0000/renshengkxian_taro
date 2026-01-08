@@ -237,7 +237,8 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
           style={{padding: fullscreen ? '16px' : '24px'}}
           onClick={closeDetail}>
           <View
-            className={`bg-card rounded-lg ${fullscreen ? 'p-4 max-w-xs' : 'p-6 max-w-md'} w-full shadow-elegant ${fullscreen ? 'space-y-2' : 'space-y-4'}`}
+            className={`bg-card rounded-lg ${fullscreen ? 'p-4 max-w-xs' : 'p-6 max-w-md'} w-full shadow-elegant flex flex-col`}
+            style={{maxHeight: fullscreen ? '80vh' : 'auto'}}
             onClick={(e) => e.stopPropagation()}>
             <View
               className={`flex items-center justify-between border-b border-border ${fullscreen ? 'pb-2' : 'pb-3'}`}>
@@ -247,44 +248,44 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
               <View className="i-mdi-close text-2xl text-muted-foreground btn-press" onClick={closeDetail} />
             </View>
 
-            <View className={fullscreen ? 'space-y-2' : 'space-y-3'}>
-              <View className="flex items-center justify-between">
-                <Text className="text-sm text-muted-foreground">运势评分</Text>
-                <View className="flex items-center gap-2">
-                  <Text className={`${fullscreen ? 'text-xl' : 'text-2xl'} font-bold text-primary`}>
-                    {selectedPoint.score.toFixed(1)}
-                  </Text>
-                  <Text className="text-sm text-muted-foreground">/ 10</Text>
+            <ScrollView scrollY className="flex-1" style={{maxHeight: fullscreen ? 'calc(80vh - 120px)' : 'auto'}}>
+              <View className={fullscreen ? 'space-y-2 py-2' : 'space-y-3 py-3'}>
+                <View className="flex items-center justify-between">
+                  <Text className="text-sm text-muted-foreground">运势评分</Text>
+                  <View className="flex items-center gap-2">
+                    <Text className={`${fullscreen ? 'text-xl' : 'text-2xl'} font-bold text-primary`}>
+                      {selectedPoint.score.toFixed(1)}
+                    </Text>
+                    <Text className="text-sm text-muted-foreground">/ 10</Text>
+                  </View>
                 </View>
-              </View>
 
-              <View className="flex items-center justify-between">
-                <Text className="text-sm text-muted-foreground">吉凶趋势</Text>
-                <Text
-                  className={`text-sm font-bold ${selectedPoint.trend === '吉' ? 'text-chart-auspicious' : 'text-chart-inauspicious'}`}>
-                  {selectedPoint.trend === '吉' ? '运势向好' : '运势欠佳'}
-                </Text>
-              </View>
+                <View className="flex items-center justify-between">
+                  <Text className="text-sm text-muted-foreground">吉凶趋势</Text>
+                  <Text
+                    className={`text-sm font-bold ${selectedPoint.trend === '吉' ? 'text-chart-auspicious' : 'text-chart-inauspicious'}`}>
+                    {selectedPoint.trend === '吉' ? '运势向好' : '运势欠佳'}
+                  </Text>
+                </View>
 
-              <View className="space-y-1">
-                <Text className="text-sm font-bold text-card-foreground">运势分析</Text>
-                <Text className={`text-sm text-muted-foreground leading-relaxed ${fullscreen ? 'line-clamp-2' : ''}`}>
-                  {selectedPoint.description ||
-                    (selectedPoint.trend === '吉'
-                      ? '此年运势向好，诸事顺遂，宜积极进取，把握机遇。'
-                      : '此年运势欠佳，多有波折，宜谨慎行事，稳中求进。')}
-                </Text>
-              </View>
+                <View className="space-y-1">
+                  <Text className="text-sm font-bold text-card-foreground">运势分析</Text>
+                  <Text className="text-sm text-muted-foreground leading-relaxed">
+                    {selectedPoint.description ||
+                      (selectedPoint.trend === '吉'
+                        ? '此年运势向好，诸事顺遂，宜积极进取，把握机遇。'
+                        : '此年运势欠佳，多有波折，宜谨慎行事，稳中求进。')}
+                  </Text>
+                </View>
 
-              {!fullscreen && (
-                <View className="space-y-2">
+                <View className="space-y-1">
                   <Text className="text-sm font-bold text-card-foreground">分析依据</Text>
                   <Text className="text-xs text-muted-foreground leading-relaxed">
                     {generateAnalysisBasis(selectedPoint)}
                   </Text>
                 </View>
-              )}
-            </View>
+              </View>
+            </ScrollView>
 
             <View className={`${fullscreen ? 'pt-2' : 'pt-3'} border-t border-border`}>
               <View
