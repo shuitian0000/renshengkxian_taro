@@ -55,27 +55,27 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
             style={{animationDuration: '3s', backgroundColor: 'hsl(var(--primary))'}}>
             {/* 左半圆 - 白色（阳） */}
             <View className="absolute left-0 top-0 w-1/2 h-full bg-background" />
-            {/* 上半部分的小圆 - 白色 */}
+            {/* 上半部分的小圆 - 白色（阳鱼头部） */}
             <View className="absolute left-1/4 top-0 w-1/2 h-1/2 rounded-full bg-background" />
-            {/* 下半部分的小圆 - 金色 */}
+            {/* 下半部分的小圆 - 金色（阴鱼头部） */}
             <View
               className="absolute right-1/4 bottom-0 w-1/2 h-1/2 rounded-full"
               style={{backgroundColor: 'hsl(var(--primary))'}}
             />
-            {/* 阳鱼眼 - 金色小点 */}
+            {/* 阳鱼眼 - 金色小点（在白色区域） */}
             <View
               className="absolute w-2.5 h-2.5 rounded-full"
               style={{
                 backgroundColor: 'hsl(var(--primary))',
                 top: '25%',
-                left: '50%',
+                left: '25%',
                 transform: 'translate(-50%, -50%)'
               }}
             />
-            {/* 阴鱼眼 - 白色小点 */}
+            {/* 阴鱼眼 - 白色小点（在金色区域） */}
             <View
               className="absolute w-2.5 h-2.5 rounded-full bg-background"
-              style={{bottom: '25%', left: '50%', transform: 'translate(-50%, 50%)'}}
+              style={{bottom: '25%', right: '25%', transform: 'translate(50%, 50%)'}}
             />
           </View>
         </View>
