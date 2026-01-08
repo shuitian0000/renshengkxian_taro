@@ -52,21 +52,21 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
         <View className="absolute inset-0 flex items-center justify-center">
           <View
             className="w-20 h-20 rounded-full relative overflow-hidden animate-spin"
-            style={{animationDuration: '3s', backgroundColor: 'hsl(var(--primary))'}}>
+            style={{animationDuration: '3s', backgroundColor: '#D4AF37'}}>
             {/* 左半圆 - 白色（阳） */}
-            <View className="absolute left-0 top-0 w-1/2 h-full bg-background" />
+            <View className="absolute left-0 top-0 w-1/2 h-full" style={{backgroundColor: '#F5F0E6'}} />
             {/* 上半部分的小圆 - 白色 */}
-            <View className="absolute left-1/4 top-0 w-1/2 h-1/2 rounded-full bg-background" />
+            <View className="absolute left-1/4 top-0 w-1/2 h-1/2 rounded-full" style={{backgroundColor: '#F5F0E6'}} />
             {/* 下半部分的小圆 - 金色 */}
             <View
               className="absolute right-1/4 bottom-0 w-1/2 h-1/2 rounded-full"
-              style={{backgroundColor: 'hsl(var(--primary))'}}
+              style={{backgroundColor: '#D4AF37'}}
             />
             {/* 阳鱼眼 - 金色小点 */}
             <View
               className="absolute w-2.5 h-2.5 rounded-full"
               style={{
-                backgroundColor: 'hsl(var(--primary))',
+                backgroundColor: '#D4AF37',
                 top: '25%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)'
@@ -74,8 +74,8 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
             />
             {/* 阴鱼眼 - 白色小点 */}
             <View
-              className="absolute w-2.5 h-2.5 rounded-full bg-background"
-              style={{bottom: '25%', left: '50%', transform: 'translate(-50%, 50%)'}}
+              className="absolute w-2.5 h-2.5 rounded-full"
+              style={{backgroundColor: '#F5F0E6', bottom: '25%', left: '50%', transform: 'translate(-50%, 50%)'}}
             />
           </View>
         </View>

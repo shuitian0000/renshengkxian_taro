@@ -35,20 +35,23 @@
 - [x] 32. 修复全屏模式显示问题（增加chartHeight到700/800，添加右侧padding 80px避免按钮遮挡）
 - [x] 33. 恢复V22太极图效果（整体背景金色，左半圆白色，上下各有小圆形成S形分界，鱼眼在中心线上）
 - [x] 34. 优化K线图容器和滚动（启用垂直滚动，增加右侧padding到100px，增加底部空间40px，确保横轴年龄数字完整显示）
+- [x] 35. 修复太极图真机显示问题（使用明确的十六进制颜色值#D4AF37和#F5F0E6替代CSS变量，确保真机兼容性）
+- [x] 36. 优化全屏按钮布局（将按钮组从右上角改为底部中央横向排列，使用圆形按钮，移除右侧padding改为底部padding 80px）
 
 ## 待完成改进
 无
 
 ## 技术要点
-- 八卦加载动画：使用CSS纯动画实现太极图（V22版本），整体背景金色（阴），左半圆白色（阳），上半部分添加白色小圆、下半部分添加金色小圆形成S形分界线，阳鱼眼（金色小点）和阴鱼眼（白色小点）都位于中心线上（left: 50%），3秒旋转一周
+- 八卦加载动画：使用CSS纯动画实现太极图（V22版本），整体背景金色（#D4AF37），左半圆白色（#F5F0E6），上半部分添加白色小圆、下半部分添加金色小圆形成S形分界线，阳鱼眼（金色小点）和阴鱼眼（白色小点）都位于中心线上（left: 50%），使用明确的十六进制颜色值确保真机兼容性，3秒旋转一周
 - K线图吉凶判断：本地算法生成的trend字段统一为"吉"或"凶"（score>=6为吉，<6为凶），K线颜色、图例、点击显示完全一致
 - 分析依据生成：根据年龄划分人生阶段（≤18少年求学、≤30青年创业、≤45中年发展、≤60成熟稳定、>60晚年颐养），结合评分细化五行分析，生成具体事件描述，避免套话
 - 微信登录：使用Taro.getUserProfile()获取用户昵称和头像，Taro.login()获取code，调用后端Edge Function完成登录，仅支持微信小程序环境
 - 数据库优化：profiles表只保留id、openid、nickname、role、created_at字段，删除不必要的username、email、phone字段
 - Canvas绘制PDF：在页面中添加隐藏Canvas元素（canvasId="reportCanvas"），使用Taro.createCanvasContext创建上下文，绘制标题、基本信息、K线图（含网格线、图例）、各章节报告内容、免责声明，实现文本自动换行（估算中英文字符宽度），使用ctx.draw()绘制后调用Taro.canvasToTempFilePath导出图片，通过Taro.saveImageToPhotosAlbum保存到相册
-- 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏，添加固定在右上角的控制按钮组（放大、缩小、重置、退出）
+- 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏
+- 全屏控制按钮：横向排列固定在底部中央（bottom-4 left-1/2 transform: translateX(-50%)），包含放大、缩小、重置、退出四个圆形按钮（rounded-full），使用shadow-lg增强视觉效果，不遮挡K线图内容
 - K线图缩放功能：在KLineChart组件中添加scale参数（默认1），通过调整barSpacing（30 * scale）和chartWidth（data.length * 30 * scale）实现图表内容的真实缩放，全屏模式默认0.8倍便于查看全图，支持0.3-3倍缩放范围，步长0.3
-- K线图容器优化：chartHeight设为600（横屏）/700（竖屏），ScrollView启用垂直滚动（scrollY={true}），全屏模式右侧padding 100px避免按钮遮挡，底部增加40px空间（minHeight: chartHeight + 40），确保横轴年龄数字和所有K线内容完整显示且可点击
+- K线图容器优化：chartHeight设为600（横屏）/700（竖屏），ScrollView启用垂直滚动（scrollY={true}），全屏模式底部padding 80px避免按钮遮挡，底部增加40px空间（minHeight: chartHeight + 40），确保横轴年龄数字和所有K线内容完整显示且可点击
 - 应用名称：统一使用"人生K线图谱"
 - 返回按钮：使用Taro.navigateBack()实现页面返回
 

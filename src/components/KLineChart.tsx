@@ -144,7 +144,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
         scrollX
         scrollY={true}
         className="w-full h-full"
-        style={{background: 'transparent', paddingRight: fullscreen ? '100px' : '0px', paddingBottom: '20px'}}>
+        style={{background: 'transparent', paddingBottom: fullscreen ? '80px' : '20px'}}>
         <View className="relative" style={{width: `${chartWidth}px`, minHeight: `${chartHeight + 40}px`}}>
           <View className="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between py-10">
             {yAxisLabels.map((label) => (

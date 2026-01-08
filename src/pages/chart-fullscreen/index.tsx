@@ -63,11 +63,11 @@ export default function ChartFullscreen() {
         />
       </View>
 
-      {/* 控制按钮组 - 固定在右上角 */}
-      <View className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+      {/* 控制按钮组 - 横向排列，固定在底部中央 */}
+      <View className="fixed bottom-4 left-1/2 z-50 flex items-center gap-3" style={{transform: 'translateX(-50%)'}}>
         {/* 放大按钮 */}
         <Button
-          className="bg-card/80 text-card-foreground w-12 h-12 rounded-lg border border-border flex items-center justify-center btn-press"
+          className="bg-card/90 text-card-foreground w-12 h-12 rounded-full border border-border flex items-center justify-center btn-press shadow-lg"
           size="mini"
           onClick={handleZoomIn}>
           <View className="i-mdi-plus text-2xl" />
@@ -75,7 +75,7 @@ export default function ChartFullscreen() {
 
         {/* 缩小按钮 */}
         <Button
-          className="bg-card/80 text-card-foreground w-12 h-12 rounded-lg border border-border flex items-center justify-center btn-press"
+          className="bg-card/90 text-card-foreground w-12 h-12 rounded-full border border-border flex items-center justify-center btn-press shadow-lg"
           size="mini"
           onClick={handleZoomOut}>
           <View className="i-mdi-minus text-2xl" />
@@ -83,7 +83,7 @@ export default function ChartFullscreen() {
 
         {/* 重置按钮 */}
         <Button
-          className="bg-card/80 text-card-foreground w-12 h-12 rounded-lg border border-border flex items-center justify-center btn-press"
+          className="bg-card/90 text-card-foreground w-12 h-12 rounded-full border border-border flex items-center justify-center btn-press shadow-lg"
           size="mini"
           onClick={handleReset}>
           <View className="i-mdi-refresh text-2xl" />
@@ -91,10 +91,10 @@ export default function ChartFullscreen() {
 
         {/* 退出按钮 */}
         <Button
-          className="bg-accent/90 text-accent-foreground px-4 py-2 rounded-lg border border-border break-keep text-sm btn-press mt-2"
+          className="bg-accent/90 text-accent-foreground px-5 py-3 rounded-full border border-border break-keep text-sm btn-press shadow-lg"
           size="mini"
           onClick={handleExit}>
-          退出全屏
+          退出
         </Button>
       </View>
     </View>
