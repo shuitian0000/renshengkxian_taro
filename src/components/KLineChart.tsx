@@ -7,6 +7,7 @@ interface KLineChartProps {
   data: KLineDataPoint[]
   dayunPeriods: DayunPeriod[]
   fullscreen?: boolean
+  scale?: number // 缩放比例，默认1
 }
 
 // 根据年龄和运势生成具体的分析依据
@@ -94,7 +95,7 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
   return `【${lifeStage}】${specificEvent}。${stageAdvice}。【五行命理】${wuxingAnalysis}。【综合评分】${score.toFixed(1)}分，运势${isAuspicious ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇，顺势而为' : '谨慎行事，蓄势待发，修身养性'}。`
 }
 
-export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLineChartProps) {
+export default function KLineChart({data, dayunPeriods, fullscreen = false, scale = 1}: KLineChartProps) {
   const [selectedPoint, setSelectedPoint] = useState<KLineDataPoint | null>(null)
   const [isLandscape, setIsLandscape] = useState(false)
 
@@ -111,8 +112,9 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLi
     return () => clearInterval(interval)
   }, [])
 
-  const chartWidth = useMemo(() => data.length * 30, [data.length])
+  const chartWidth = useMemo(() => data.length * 30 * scale, [data.length, scale])
   const chartHeight = fullscreen ? (isLandscape ? 500 : 600) : isLandscape ? 300 : 400
+  const barSpacing = 30 * scale // K线柱间距，随缩放调整
 
   const yAxisLabels = useMemo(() => {
     const labels: number[] = []
@@ -163,11 +165,11 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLi
               <View key={index}>
                 <View
                   className="absolute top-10 bottom-10 border-l-2 border-l-dashed"
-                  style={{left: `${startIndex * 30 + 60}px`, borderColor: 'hsl(var(--chart-dayun))'}}
+                  style={{left: `${startIndex * barSpacing + 60}px`, borderColor: 'hsl(var(--chart-dayun))'}}
                 />
                 <Text
                   className="absolute text-xs"
-                  style={{left: `${startIndex * 30 + 65}px`, top: '10px', color: 'hsl(var(--chart-dayun))'}}>
+                  style={{left: `${startIndex * barSpacing + 65}px`, top: '10px', color: 'hsl(var(--chart-dayun))'}}>
                   {period.ganZhi}
                 </Text>
               </View>
@@ -175,7 +177,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false}: KLi
           })}
 
           {data.map((point, index) => {
-            const x = index * 30 + 60
+            const x = index * barSpacing + 60
             const openY = getYPosition(point.open)
             const closeY = getYPosition(point.close)
             const highY = getYPosition(point.high)

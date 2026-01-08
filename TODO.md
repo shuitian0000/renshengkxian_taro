@@ -29,18 +29,21 @@
 - [x] 26. 实现K线图横屏全屏显示（创建独立全屏页面，支持横屏显示和便捷退出）
 - [x] 27. 修复太极图鱼眼位置（阳鱼眼在白色区域左侧，阴鱼眼在金色区域右侧）
 - [x] 28. 添加全屏缩放功能（支持放大、缩小、重置，缩放范围0.5-3倍）
+- [x] 29. 重新设计太极图结构（上半部分白色阳鱼，下半部分金色阴鱼，S形分界线，鱼眼位于对应区域中心）
+- [x] 30. 优化K线图缩放实现（修改为图表内容缩放而非容器缩放，调整barSpacing和chartWidth，默认0.8倍便于查看全图）
 
 ## 待完成改进
 无
 
 ## 技术要点
-- 八卦加载动画：使用CSS纯动画实现太极图，整体背景金色（阴），左半圆白色（阳），上半部分添加白色小圆（阳鱼头部）、下半部分添加金色小圆（阴鱼头部）形成S形分界线，阳鱼眼（金色小点）位于白色区域左侧（left: 25%），阴鱼眼（白色小点）位于金色区域右侧（right: 25%），3秒旋转一周
+- 八卦加载动画：使用CSS纯动画实现标准太极图，上半部分白色（阳鱼），下半部分金色（阴鱼），右上角添加白色半圆（阳鱼头部）、左下角添加金色半圆（阴鱼头部）形成S形分界线，阳鱼眼（金色小点）位于右上白色区域中心（top: 25%, right: 25%），阴鱼眼（白色小点）位于左下金色区域中心（bottom: 25%, left: 25%），3秒旋转一周
 - K线图吉凶判断：本地算法生成的trend字段统一为"吉"或"凶"（score>=6为吉，<6为凶），K线颜色、图例、点击显示完全一致
 - 分析依据生成：根据年龄划分人生阶段（≤18少年求学、≤30青年创业、≤45中年发展、≤60成熟稳定、>60晚年颐养），结合评分细化五行分析，生成具体事件描述，避免套话
 - 微信登录：使用Taro.getUserProfile()获取用户昵称和头像，Taro.login()获取code，调用后端Edge Function完成登录，仅支持微信小程序环境
 - 数据库优化：profiles表只保留id、openid、nickname、role、created_at字段，删除不必要的username、email、phone字段
 - Canvas绘制PDF：在页面中添加隐藏Canvas元素（canvasId="reportCanvas"），使用Taro.createCanvasContext创建上下文，绘制标题、基本信息、K线图（含网格线、图例）、各章节报告内容、免责声明，实现文本自动换行（估算中英文字符宽度），使用ctx.draw()绘制后调用Taro.canvasToTempFilePath导出图片，通过Taro.saveImageToPhotosAlbum保存到相册
-- 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏，添加固定在右上角的控制按钮组（放大、缩小、重置、退出），支持缩放功能（scale范围0.5-3倍，步长0.2），使用CSS transform实现平滑缩放动画
+- 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏，添加固定在右上角的控制按钮组（放大、缩小、重置、退出）
+- K线图缩放功能：在KLineChart组件中添加scale参数（默认1），通过调整barSpacing（30 * scale）和chartWidth（data.length * 30 * scale）实现图表内容的真实缩放，全屏模式默认0.8倍便于查看全图，支持0.3-3倍缩放范围，步长0.3
 - 应用名称：统一使用"人生K线图谱"
 - 返回按钮：使用Taro.navigateBack()实现页面返回
 

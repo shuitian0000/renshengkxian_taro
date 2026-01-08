@@ -5,9 +5,9 @@ import KLineChart from '@/components/KLineChart'
 
 export default function ChartFullscreen() {
   const [reportData, setReportData] = useState<any>(null)
-  const [scale, setScale] = useState(1)
-  const [translateX, setTranslateX] = useState(0)
-  const [translateY, setTranslateY] = useState(0)
+  const [scale, setScale] = useState(0.8) // 默认0.8倍，让K线图更容易看全
+  const [_translateX, setTranslateX] = useState(0)
+  const [_translateY, setTranslateY] = useState(0)
 
   useDidShow(() => {
     // 从storage获取报告数据
@@ -28,17 +28,17 @@ export default function ChartFullscreen() {
 
   // 放大
   const handleZoomIn = useCallback(() => {
-    setScale((prev) => Math.min(prev + 0.2, 3))
+    setScale((prev) => Math.min(prev + 0.3, 3))
   }, [])
 
   // 缩小
   const handleZoomOut = useCallback(() => {
-    setScale((prev) => Math.max(prev - 0.2, 0.5))
+    setScale((prev) => Math.max(prev - 0.3, 0.3))
   }, [])
 
   // 重置
   const handleReset = useCallback(() => {
-    setScale(1)
+    setScale(0.8)
     setTranslateX(0)
     setTranslateY(0)
   }, [])
@@ -53,15 +53,14 @@ export default function ChartFullscreen() {
 
   return (
     <View className="min-h-screen bg-gradient-dark relative overflow-hidden">
-      {/* K线图 - 横屏全屏显示，支持缩放和拖动 */}
-      <View
-        className="w-full h-screen"
-        style={{
-          transform: `scale(${scale}) translate(${translateX}px, ${translateY}px)`,
-          transformOrigin: 'center center',
-          transition: 'transform 0.3s ease'
-        }}>
-        <KLineChart data={reportData.klineData} dayunPeriods={reportData.dayunPeriods} fullscreen={true} />
+      {/* K线图 - 横屏全屏显示，支持缩放 */}
+      <View className="w-full h-screen">
+        <KLineChart
+          data={reportData.klineData}
+          dayunPeriods={reportData.dayunPeriods}
+          fullscreen={true}
+          scale={scale}
+        />
       </View>
 
       {/* 控制按钮组 - 固定在右上角 */}
