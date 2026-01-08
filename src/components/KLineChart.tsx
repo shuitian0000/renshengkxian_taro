@@ -113,7 +113,8 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
   }, [])
 
   const chartWidth = useMemo(() => data.length * 30 * scale, [data.length, scale])
-  const chartHeight = fullscreen ? (isLandscape ? 700 : 800) : isLandscape ? 300 : 400
+  // 图表内容高度（包含上下padding）
+  const chartHeight = fullscreen ? (isLandscape ? 600 : 700) : isLandscape ? 300 : 400
   const barSpacing = 30 * scale // K线柱间距，随缩放调整
 
   const yAxisLabels = useMemo(() => {
@@ -137,13 +138,14 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
   }, [])
 
   return (
-    <View className={`w-full ${fullscreen ? 'h-screen' : isLandscape ? 'h-72' : 'h-96'} bg-card relative`}>
+    <View
+      className={`w-full ${fullscreen ? 'h-screen' : isLandscape ? 'h-72' : 'h-96'} bg-card relative overflow-hidden`}>
       <ScrollView
         scrollX
-        scrollY={false}
+        scrollY={true}
         className="w-full h-full"
-        style={{background: 'transparent', paddingRight: fullscreen ? '80px' : '0px'}}>
-        <View className="relative" style={{width: `${chartWidth}px`, height: `${chartHeight}px`}}>
+        style={{background: 'transparent', paddingRight: fullscreen ? '100px' : '0px', paddingBottom: '20px'}}>
+        <View className="relative" style={{width: `${chartWidth}px`, minHeight: `${chartHeight + 40}px`}}>
           <View className="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between py-10">
             {yAxisLabels.map((label) => (
               <Text key={label} className="text-xs text-muted-foreground text-right pr-2">
