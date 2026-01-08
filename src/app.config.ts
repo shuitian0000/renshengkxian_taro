@@ -3,7 +3,8 @@ const pages = [
   'pages/chart/index',
   'pages/report/index',
   'pages/history/index',
-  'pages/profile/index'
+  'pages/profile/index',
+  'pages/chart-fullscreen/index'
 ]
 
 export default defineAppConfig({

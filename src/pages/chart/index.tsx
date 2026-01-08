@@ -8,7 +8,6 @@ import {generateAndSavePDF} from '@/utils/pdfGenerator'
 
 export default function Chart() {
   const [reportData, setReportData] = useState<any>(null)
-  const [fullscreen, setFullscreen] = useState(false)
   const [saving, setSaving] = useState(false)
 
   useDidShow(() => {
@@ -24,8 +23,9 @@ export default function Chart() {
   })
 
   const toggleFullscreen = useCallback(() => {
-    setFullscreen(!fullscreen)
-  }, [fullscreen])
+    // 跳转到全屏横屏页面
+    Taro.navigateTo({url: '/pages/chart-fullscreen/index'})
+  }, [])
 
   const viewReport = useCallback(() => {
     Taro.navigateTo({url: '/pages/report/index'})
@@ -192,11 +192,11 @@ export default function Chart() {
               <View className="px-4 py-3 border-b border-border flex items-center justify-between">
                 <Text className="text-card-foreground font-bold">运势K线图</Text>
                 <View className="flex items-center gap-1 btn-press" onClick={toggleFullscreen}>
-                  <View className={`i-mdi-${fullscreen ? 'fullscreen-exit' : 'fullscreen'} text-xl text-primary`} />
-                  <Text className="text-primary text-sm">{fullscreen ? '退出全屏' : '全屏查看'}</Text>
+                  <View className="i-mdi-fullscreen text-xl text-primary" />
+                  <Text className="text-primary text-sm">全屏查看</Text>
                 </View>
               </View>
-              <KLineChart data={reportData.klineData} dayunPeriods={reportData.dayunPeriods} fullscreen={fullscreen} />
+              <KLineChart data={reportData.klineData} dayunPeriods={reportData.dayunPeriods} fullscreen={false} />
             </View>
           </View>
 

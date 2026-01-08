@@ -26,6 +26,7 @@
 - [x] 23. 简化数据库表结构（删除username、email、phone字段）
 - [x] 24. 修复Canvas绘制PDF功能（使用Taro.createCanvasContext和页面Canvas元素）
 - [x] 25. 修改应用名称为"人生K线图谱"
+- [x] 26. 实现K线图横屏全屏显示（创建独立全屏页面，支持横屏显示和便捷退出）
 
 ## 待完成改进
 无
@@ -37,8 +38,8 @@
 - 微信登录：使用Taro.getUserProfile()获取用户昵称和头像，Taro.login()获取code，调用后端Edge Function完成登录，仅支持微信小程序环境
 - 数据库优化：profiles表只保留id、openid、nickname、role、created_at字段，删除不必要的username、email、phone字段
 - Canvas绘制PDF：在页面中添加隐藏Canvas元素（canvasId="reportCanvas"），使用Taro.createCanvasContext创建上下文，绘制标题、基本信息、K线图（含网格线、图例）、各章节报告内容、免责声明，实现文本自动换行（估算中英文字符宽度），使用ctx.draw()绘制后调用Taro.canvasToTempFilePath导出图片，通过Taro.saveImageToPhotosAlbum保存到相册
+- 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏，添加固定在右上角的退出按钮，点击"全屏查看"跳转到该页面，用户可通过退出按钮或返回键退出
 - 应用名称：统一使用"人生K线图谱"
-- 横竖屏适配：监听屏幕方向变化，动态调整K线图布局
 - 返回按钮：使用Taro.navigateBack()实现页面返回
 
 ## 根本原因分析
