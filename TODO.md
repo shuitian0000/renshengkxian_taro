@@ -37,6 +37,8 @@
 - [x] 34. 优化K线图容器和滚动（启用垂直滚动，增加右侧padding到100px，增加底部空间40px，确保横轴年龄数字完整显示）
 - [x] 35. 修复太极图真机显示问题（使用明确的十六进制颜色值#D4AF37和#F5F0E6替代CSS变量，确保真机兼容性）
 - [x] 36. 优化全屏按钮布局（将按钮组从右上角改为底部中央横向排列，使用圆形按钮，移除右侧padding改为底部padding 80px）
+- [x] 37. 优化全屏模式运势解析弹窗（弹窗宽度从max-w-md改为max-w-sm，文本内容使用line-clamp限制行数，确保关闭按钮可见）
+- [x] 38. 优化全屏模式图表高度（chartHeight从600/700降低到450/550，使图表更紧凑，更好地适配屏幕尺寸）
 
 ## 待完成改进
 无
@@ -51,7 +53,8 @@
 - 横屏全屏显示：创建独立的全屏页面（/pages/chart-fullscreen/index.tsx），在页面配置中设置pageOrientation: 'landscape'实现横屏显示，navigationStyle: 'custom'隐藏导航栏
 - 全屏控制按钮：横向排列固定在底部中央（bottom-4 left-1/2 transform: translateX(-50%)），包含放大、缩小、重置、退出四个圆形按钮（rounded-full），使用shadow-lg增强视觉效果，不遮挡K线图内容
 - K线图缩放功能：在KLineChart组件中添加scale参数（默认1），通过调整barSpacing（30 * scale）和chartWidth（data.length * 30 * scale）实现图表内容的真实缩放，全屏模式默认0.8倍便于查看全图，支持0.3-3倍缩放范围，步长0.3
-- K线图容器优化：chartHeight设为600（横屏）/700（竖屏），ScrollView启用垂直滚动（scrollY={true}），全屏模式底部padding 80px避免按钮遮挡，底部增加40px空间（minHeight: chartHeight + 40），确保横轴年龄数字和所有K线内容完整显示且可点击
+- K线图容器优化：chartHeight根据模式动态调整（全屏横屏450、全屏竖屏550、非全屏横屏300、非全屏竖屏400），ScrollView启用垂直滚动（scrollY={true}），全屏模式底部padding 80px避免按钮遮挡，底部增加40px空间（minHeight: chartHeight + 40），确保横轴年龄数字和所有K线内容完整显示且可点击
+- 运势解析弹窗：点击K线显示运势详情，全屏模式下弹窗宽度为max-w-sm（较小），非全屏模式为max-w-md，全屏模式下文本内容使用line-clamp-3和line-clamp-2限制行数，确保弹窗紧凑且关闭按钮（右上角X图标）始终可见，点击背景或关闭按钮可关闭弹窗
 - 应用名称：统一使用"人生K线图谱"
 - 返回按钮：使用Taro.navigateBack()实现页面返回
 

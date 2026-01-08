@@ -113,8 +113,8 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
   }, [])
 
   const chartWidth = useMemo(() => data.length * 30 * scale, [data.length, scale])
-  // 图表内容高度（包含上下padding）
-  const chartHeight = fullscreen ? (isLandscape ? 600 : 700) : isLandscape ? 300 : 400
+  // 图表内容高度（包含上下padding）- 全屏模式下更紧凑
+  const chartHeight = fullscreen ? (isLandscape ? 450 : 550) : isLandscape ? 300 : 400
   const barSpacing = 30 * scale // K线柱间距，随缩放调整
 
   const yAxisLabels = useMemo(() => {
@@ -236,7 +236,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
           className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center p-6"
           onClick={closeDetail}>
           <View
-            className="bg-card rounded-lg p-6 max-w-md w-full shadow-elegant space-y-4"
+            className={`bg-card rounded-lg p-6 ${fullscreen ? 'max-w-sm' : 'max-w-md'} w-full shadow-elegant space-y-4`}
             onClick={(e) => e.stopPropagation()}>
             <View className="flex items-center justify-between border-b border-border pb-3">
               <Text className="text-lg font-bold text-card-foreground">{selectedPoint.age}岁运势</Text>
@@ -262,7 +262,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
 
               <View className="space-y-2">
                 <Text className="text-sm font-bold text-card-foreground">运势分析</Text>
-                <Text className="text-sm text-muted-foreground leading-relaxed">
+                <Text className={`text-sm text-muted-foreground leading-relaxed ${fullscreen ? 'line-clamp-3' : ''}`}>
                   {selectedPoint.description ||
                     (selectedPoint.trend === '吉'
                       ? '此年运势向好，诸事顺遂，宜积极进取，把握机遇。'
@@ -272,7 +272,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
 
               <View className="space-y-2">
                 <Text className="text-sm font-bold text-card-foreground">分析依据</Text>
-                <Text className="text-xs text-muted-foreground leading-relaxed">
+                <Text className={`text-xs text-muted-foreground leading-relaxed ${fullscreen ? 'line-clamp-2' : ''}`}>
                   {generateAnalysisBasis(selectedPoint)}
                 </Text>
               </View>
