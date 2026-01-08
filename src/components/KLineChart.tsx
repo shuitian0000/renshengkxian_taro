@@ -114,7 +114,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
 
   const chartWidth = useMemo(() => data.length * 30 * scale, [data.length, scale])
   // 图表内容高度（包含上下padding）- 全屏模式下更紧凑
-  const chartHeight = fullscreen ? (isLandscape ? 450 : 550) : isLandscape ? 300 : 400
+  const chartHeight = fullscreen ? (isLandscape ? 350 : 450) : isLandscape ? 300 : 400
   const barSpacing = 30 * scale // K线柱间距，随缩放调整
 
   const yAxisLabels = useMemo(() => {
@@ -233,21 +233,27 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
 
       {selectedPoint && (
         <View
-          className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center p-6"
+          className="absolute inset-0 bg-background/90 backdrop-blur-sm flex items-center justify-center"
+          style={{padding: fullscreen ? '16px' : '24px'}}
           onClick={closeDetail}>
           <View
-            className={`bg-card rounded-lg p-6 ${fullscreen ? 'max-w-sm' : 'max-w-md'} w-full shadow-elegant space-y-4`}
+            className={`bg-card rounded-lg ${fullscreen ? 'p-4 max-w-xs' : 'p-6 max-w-md'} w-full shadow-elegant ${fullscreen ? 'space-y-2' : 'space-y-4'}`}
             onClick={(e) => e.stopPropagation()}>
-            <View className="flex items-center justify-between border-b border-border pb-3">
-              <Text className="text-lg font-bold text-card-foreground">{selectedPoint.age}岁运势</Text>
+            <View
+              className={`flex items-center justify-between border-b border-border ${fullscreen ? 'pb-2' : 'pb-3'}`}>
+              <Text className={`${fullscreen ? 'text-base' : 'text-lg'} font-bold text-card-foreground`}>
+                {selectedPoint.age}岁运势
+              </Text>
               <View className="i-mdi-close text-2xl text-muted-foreground btn-press" onClick={closeDetail} />
             </View>
 
-            <View className="space-y-3">
+            <View className={fullscreen ? 'space-y-2' : 'space-y-3'}>
               <View className="flex items-center justify-between">
                 <Text className="text-sm text-muted-foreground">运势评分</Text>
                 <View className="flex items-center gap-2">
-                  <Text className="text-2xl font-bold text-primary">{selectedPoint.score.toFixed(1)}</Text>
+                  <Text className={`${fullscreen ? 'text-xl' : 'text-2xl'} font-bold text-primary`}>
+                    {selectedPoint.score.toFixed(1)}
+                  </Text>
                   <Text className="text-sm text-muted-foreground">/ 10</Text>
                 </View>
               </View>
@@ -260,9 +266,9 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
                 </Text>
               </View>
 
-              <View className="space-y-2">
+              <View className="space-y-1">
                 <Text className="text-sm font-bold text-card-foreground">运势分析</Text>
-                <Text className={`text-sm text-muted-foreground leading-relaxed ${fullscreen ? 'line-clamp-3' : ''}`}>
+                <Text className={`text-sm text-muted-foreground leading-relaxed ${fullscreen ? 'line-clamp-2' : ''}`}>
                   {selectedPoint.description ||
                     (selectedPoint.trend === '吉'
                       ? '此年运势向好，诸事顺遂，宜积极进取，把握机遇。'
@@ -270,16 +276,20 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
                 </Text>
               </View>
 
-              <View className="space-y-2">
-                <Text className="text-sm font-bold text-card-foreground">分析依据</Text>
-                <Text className={`text-xs text-muted-foreground leading-relaxed ${fullscreen ? 'line-clamp-2' : ''}`}>
-                  {generateAnalysisBasis(selectedPoint)}
-                </Text>
-              </View>
+              {!fullscreen && (
+                <View className="space-y-2">
+                  <Text className="text-sm font-bold text-card-foreground">分析依据</Text>
+                  <Text className="text-xs text-muted-foreground leading-relaxed">
+                    {generateAnalysisBasis(selectedPoint)}
+                  </Text>
+                </View>
+              )}
             </View>
 
-            <View className="pt-3 border-t border-border">
-              <View className="w-full py-3 rounded-lg bg-primary text-center btn-press" onClick={closeDetail}>
+            <View className={`${fullscreen ? 'pt-2' : 'pt-3'} border-t border-border`}>
+              <View
+                className={`w-full ${fullscreen ? 'py-2' : 'py-3'} rounded-lg bg-primary text-center btn-press`}
+                onClick={closeDetail}>
                 <Text className="text-primary-foreground font-bold">关闭</Text>
               </View>
             </View>
