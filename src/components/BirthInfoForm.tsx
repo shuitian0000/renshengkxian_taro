@@ -44,7 +44,7 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
   return (
     <View className="w-full space-y-4">
       {/* 姓名和性别排在一行 */}
-      <View className="flex gap-3">
+      <View className="flex gap-3 items-end">
         <View className="flex-1 space-y-2">
           <Text className="text-card-foreground text-base font-bold">姓名</Text>
           <View
@@ -82,7 +82,7 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
         </Picker>
       </View>
       {/* 出生日期和出生时辰排在一行 */}
-      <View className="flex gap-3">
+      <View className="flex gap-3 items-end">
         <View className="flex-1 space-y-2">
           <Text className="text-card-foreground text-base font-bold">出生日期</Text>
           <Picker mode="date" value={birthDate} onChange={(e) => setBirthDate(e.detail.value)}>
