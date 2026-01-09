@@ -58,39 +58,25 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
       </View>
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">性别</Text>
-        <View className="flex gap-4">
-          <View
-            className={`flex-1 py-3 rounded border text-center btn-press ${gender === 'male' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
-            onClick={() => setGender('male')}>
-            <Text className={gender === 'male' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>男</Text>
+        <Picker
+          mode="selector"
+          range={['男', '女']}
+          onChange={(e) => setGender(e.detail.value === 0 ? 'male' : 'female')}>
+          <View className="bg-input rounded px-4 py-3 border border-border">
+            <Text className="text-card-foreground">{gender === 'male' ? '男' : '女'}</Text>
           </View>
-          <View
-            className={`flex-1 py-3 rounded border text-center btn-press ${gender === 'female' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
-            onClick={() => setGender('female')}>
-            <Text className={gender === 'female' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
-              女
-            </Text>
-          </View>
-        </View>
+        </Picker>
       </View>
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">历法类型</Text>
-        <View className="flex gap-4">
-          <View
-            className={`flex-1 py-3 rounded border text-center btn-press ${calendarType === 'solar' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
-            onClick={() => setCalendarType('solar')}>
-            <Text className={calendarType === 'solar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
-              公历
-            </Text>
+        <Picker
+          mode="selector"
+          range={['公历', '农历']}
+          onChange={(e) => setCalendarType(e.detail.value === 0 ? 'solar' : 'lunar')}>
+          <View className="bg-input rounded px-4 py-3 border border-border">
+            <Text className="text-card-foreground">{calendarType === 'solar' ? '公历' : '农历'}</Text>
           </View>
-          <View
-            className={`flex-1 py-3 rounded border text-center btn-press ${calendarType === 'lunar' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
-            onClick={() => setCalendarType('lunar')}>
-            <Text className={calendarType === 'lunar' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
-              农历
-            </Text>
-          </View>
-        </View>
+        </Picker>
       </View>
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">出生日期</Text>
