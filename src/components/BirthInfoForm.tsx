@@ -42,30 +42,33 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
   }
 
   return (
-    <View className="w-full space-y-6">
-      <View className="space-y-2">
-        <Text className="text-card-foreground text-base font-bold">姓名</Text>
-        <View
-          className={`bg-input rounded px-4 py-3 ${hasError('姓名') ? 'border-2 border-destructive' : 'border border-border'}`}>
-          <Input
-            className="w-full text-card-foreground"
-            placeholder="请输入姓名"
-            value={name}
-            onInput={(e) => setName(e.detail.value)}
-            style={{padding: 0, border: 'none', background: 'transparent'}}
-          />
-        </View>
-      </View>
-      <View className="space-y-2">
-        <Text className="text-card-foreground text-base font-bold">性别</Text>
-        <Picker
-          mode="selector"
-          range={['男', '女']}
-          onChange={(e) => setGender(e.detail.value === 0 ? 'male' : 'female')}>
-          <View className="bg-input rounded px-4 py-3 border border-border">
-            <Text className="text-card-foreground">{gender === 'male' ? '男' : '女'}</Text>
+    <View className="w-full space-y-4">
+      {/* 姓名和性别排在一行 */}
+      <View className="flex gap-3">
+        <View className="flex-1 space-y-2">
+          <Text className="text-card-foreground text-base font-bold">姓名</Text>
+          <View
+            className={`bg-input rounded px-4 py-3 ${hasError('姓名') ? 'border-2 border-destructive' : 'border border-border'}`}>
+            <Input
+              className="w-full text-card-foreground"
+              placeholder="请输入姓名"
+              value={name}
+              onInput={(e) => setName(e.detail.value)}
+              style={{padding: 0, border: 'none', background: 'transparent'}}
+            />
           </View>
-        </Picker>
+        </View>
+        <View className="w-28 space-y-2">
+          <Text className="text-card-foreground text-base font-bold">性别</Text>
+          <Picker
+            mode="selector"
+            range={['男', '女']}
+            onChange={(e) => setGender(e.detail.value === 0 ? 'male' : 'female')}>
+            <View className="bg-input rounded px-4 py-3 border border-border">
+              <Text className="text-card-foreground">{gender === 'male' ? '男' : '女'}</Text>
+            </View>
+          </Picker>
+        </View>
       </View>
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">历法类型</Text>
@@ -78,30 +81,33 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
           </View>
         </Picker>
       </View>
-      <View className="space-y-2">
-        <Text className="text-card-foreground text-base font-bold">出生日期</Text>
-        <Picker mode="date" value={birthDate} onChange={(e) => setBirthDate(e.detail.value)}>
-          <View
-            className={`bg-input rounded px-4 py-3 ${hasError('出生日期') ? 'border-2 border-destructive' : 'border border-border'}`}>
-            <Text className={birthDate ? 'text-card-foreground' : 'text-muted-foreground'}>
-              {birthDate || '请选择出生日期'}
-            </Text>
-          </View>
-        </Picker>
-      </View>
-      <View className="space-y-2">
-        <Text className="text-card-foreground text-base font-bold">出生时辰</Text>
-        <Picker
-          mode="selector"
-          range={TIME_PERIODS.map((t) => t.label)}
-          onChange={(e) => setBirthTime(TIME_PERIODS[e.detail.value].value)}>
-          <View
-            className={`bg-input rounded px-4 py-3 ${hasError('出生时辰') ? 'border-2 border-destructive' : 'border border-border'}`}>
-            <Text className={birthTime ? 'text-card-foreground' : 'text-muted-foreground'}>
-              {birthTime ? TIME_PERIODS.find((t) => t.value === birthTime)?.label : '请选择出生时辰'}
-            </Text>
-          </View>
-        </Picker>
+      {/* 出生日期和出生时辰排在一行 */}
+      <View className="flex gap-3">
+        <View className="flex-1 space-y-2">
+          <Text className="text-card-foreground text-base font-bold">出生日期</Text>
+          <Picker mode="date" value={birthDate} onChange={(e) => setBirthDate(e.detail.value)}>
+            <View
+              className={`bg-input rounded px-4 py-3 ${hasError('出生日期') ? 'border-2 border-destructive' : 'border border-border'}`}>
+              <Text className={birthDate ? 'text-card-foreground' : 'text-muted-foreground'}>
+                {birthDate || '请选择出生日期'}
+              </Text>
+            </View>
+          </Picker>
+        </View>
+        <View className="flex-1 space-y-2">
+          <Text className="text-card-foreground text-base font-bold">出生时辰</Text>
+          <Picker
+            mode="selector"
+            range={TIME_PERIODS.map((t) => t.label)}
+            onChange={(e) => setBirthTime(TIME_PERIODS[e.detail.value].value)}>
+            <View
+              className={`bg-input rounded px-4 py-3 ${hasError('出生时辰') ? 'border-2 border-destructive' : 'border border-border'}`}>
+              <Text className={birthTime ? 'text-card-foreground' : 'text-muted-foreground'}>
+                {birthTime ? TIME_PERIODS.find((t) => t.value === birthTime)?.label : '请选择出生时辰'}
+              </Text>
+            </View>
+          </Picker>
+        </View>
       </View>
       <View className="space-y-2">
         <Text className="text-card-foreground text-base font-bold">出生地区</Text>
