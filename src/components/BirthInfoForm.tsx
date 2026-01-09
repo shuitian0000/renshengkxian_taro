@@ -11,6 +11,7 @@ interface BirthInfoFormProps {
 
 export interface BirthInfoData {
   name: string
+  gender: 'male' | 'female'
   birthDate: string
   birthTime: string
   birthRegion: string
@@ -19,6 +20,7 @@ export interface BirthInfoData {
 
 export default function BirthInfoForm({onChange, onSubmit, validationErrors = []}: BirthInfoFormProps) {
   const [name, setName] = useState('')
+  const [gender, setGender] = useState<'male' | 'female'>('male')
   const [birthDate, setBirthDate] = useState('')
   const [birthTime, setBirthTime] = useState('')
   const [birthRegion, setBirthRegion] = useState('')
@@ -28,14 +30,14 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
 
   useEffect(() => {
     if (onChange) {
-      onChange({name, birthDate, birthTime, birthRegion, calendarType})
+      onChange({name, gender, birthDate, birthTime, birthRegion, calendarType})
     }
-  }, [name, birthDate, birthTime, birthRegion, calendarType, onChange])
+  }, [name, gender, birthDate, birthTime, birthRegion, calendarType, onChange])
 
   const handleSubmit = () => {
     if (!name || !birthDate || !birthTime || !birthRegion) return
     if (onSubmit) {
-      onSubmit({name, birthDate, birthTime, birthRegion, calendarType})
+      onSubmit({name, gender, birthDate, birthTime, birthRegion, calendarType})
     }
   }
 
@@ -52,6 +54,23 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
             onInput={(e) => setName(e.detail.value)}
             style={{padding: 0, border: 'none', background: 'transparent'}}
           />
+        </View>
+      </View>
+      <View className="space-y-2">
+        <Text className="text-card-foreground text-base font-bold">性别</Text>
+        <View className="flex gap-4">
+          <View
+            className={`flex-1 py-3 rounded border text-center btn-press ${gender === 'male' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
+            onClick={() => setGender('male')}>
+            <Text className={gender === 'male' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>男</Text>
+          </View>
+          <View
+            className={`flex-1 py-3 rounded border text-center btn-press ${gender === 'female' ? 'bg-primary border-primary' : 'bg-secondary border-border'}`}
+            onClick={() => setGender('female')}>
+            <Text className={gender === 'female' ? 'text-primary-foreground font-bold' : 'text-card-foreground'}>
+              女
+            </Text>
+          </View>
         </View>
       </View>
       <View className="space-y-2">

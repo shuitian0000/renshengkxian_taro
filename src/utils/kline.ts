@@ -54,13 +54,18 @@ export function generateDayunPeriods(birthYear: number): DayunPeriod[] {
 /**
  * 生成本地K线数据
  */
-export function generateLocalKLineData(birthYear: number, birthMonth: number): KLineDataPoint[] {
+export function generateLocalKLineData(
+  birthYear: number,
+  birthMonth: number,
+  gender: 'male' | 'female' = 'male'
+): KLineDataPoint[] {
   const data: KLineDataPoint[] = []
   const startAge = 5
   const endAge = 85
 
-  // 使用出生年月作为随机种子，确保同一用户生成的数据一致
-  const seed = birthYear * 100 + birthMonth
+  // 使用出生年月和性别作为随机种子，确保同一用户生成的数据一致
+  const genderSeed = gender === 'male' ? 1 : 2
+  const seed = birthYear * 100 + birthMonth + genderSeed * 10000
 
   for (let age = startAge; age <= endAge; age++) {
     // 基于年龄和种子生成伪随机数
@@ -69,11 +74,18 @@ export function generateLocalKLineData(birthYear: number, birthMonth: number): K
     const random3 = Math.sin(seed * age * 0.3 + 2) * 0.5 + 0.5
 
     // 生命周期曲线：青年上升，中年平稳，老年下降
+    // 性别差异：男性事业运势在30-50岁较强，女性在25-45岁较强
     let lifeCurve = 5
     if (age < 25) {
       lifeCurve = 4 + (age - 5) * 0.15 // 青年期上升
     } else if (age < 55) {
-      lifeCurve = 7 + Math.sin((age - 25) * 0.2) * 1.5 // 中年期波动
+      if (gender === 'male') {
+        // 男性：30-50岁事业高峰期
+        lifeCurve = 7 + Math.sin((age - 25) * 0.2) * 1.5 + (age >= 30 && age <= 50 ? 0.5 : 0)
+      } else {
+        // 女性：25-45岁综合运势较强
+        lifeCurve = 7 + Math.sin((age - 25) * 0.2) * 1.5 + (age >= 25 && age <= 45 ? 0.5 : 0)
+      }
     } else {
       lifeCurve = 7 - (age - 55) * 0.05 // 老年期缓降
     }
@@ -129,42 +141,66 @@ export function generateLocalKLineData(birthYear: number, birthMonth: number): K
 /**
  * 生成本地命理报告
  */
-export function generateLocalReport(name: string, birthYear: number) {
-  // 基于出生年份生成伪随机评分
-  const seed = birthYear
+export function generateLocalReport(name: string, birthYear: number, gender: 'male' | 'female' = 'male') {
+  // 基于出生年份和性别生成伪随机评分
+  const genderSeed = gender === 'male' ? 1 : 2
+  const seed = birthYear + genderSeed * 1000
   const random = (index: number) => {
     const value = Math.sin(seed * index * 0.1) * 0.5 + 0.5
     return Number((5 + value * 5).toFixed(1))
   }
 
+  // 性别相关的称谓和描述
+  const genderText = gender === 'male' ? '男命' : '女命'
+  const careerText =
+    gender === 'male'
+      ? '事业运势稳中有升，适合从事管理、金融、科技等行业。30-50岁为事业黄金期，需把握机遇，积极进取。贵人相助，机遇不断。'
+      : '事业运势良好，适合从事教育、医疗、文化、管理等行业。25-45岁为事业发展期，兼顾家庭与事业，平衡发展。女性领导力强，善于协调。'
+  const marriageText =
+    gender === 'male'
+      ? '婚姻运势良好，宜晚婚。配偶贤惠，家庭和睦。感情专一，夫妻恩爱，子女孝顺。需注意沟通，承担家庭责任。'
+      : '婚姻运势佳，感情细腻。配偶体贴，家庭温馨。善于经营婚姻，夫妻恩爱，子女聪慧。需平衡家庭与事业，相互理解。'
+
   return {
     summary: {
       score: random(1),
-      content: `${name}命格中正平和，五行流转有序。一生运势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年福寿安康。性格坚韧不拔，处事稳重，善于把握机遇。建议顺应天时，积极进取，必能成就一番事业。`
+      content: `${name}${genderText}命格中正平和，五行流转有序。一生运势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年福寿安康。性格坚韧不拔，处事稳重，善于把握机遇。建议顺应天时，积极进取，必能成就一番事业。`
     },
     personality: {
       score: random(2),
-      content: `性格沉稳内敛，做事有条不紊。待人真诚，重情重义，朋友众多。思维缜密，善于分析，决策果断。但有时过于谨慎，需要更多勇气突破自我。`
+      content:
+        gender === 'male'
+          ? `性格沉稳果断，做事有条不紊。待人真诚，重情重义，朋友众多。思维理性，善于分析，决策果断。责任心强，但有时过于刚强，需要更多柔和与包容。`
+          : `性格温婉细腻，做事认真负责。待人和善，善解人意，人缘极佳。思维敏捷，善于沟通，情商高。兼具柔韧与坚强，但有时过于顾虑他人，需要更多自信与果断。`
     },
     career: {
       score: random(3),
-      content: `事业运势稳中有升，适合从事管理、金融、教育等行业。早年需积累经验，中年后事业有成。贵人相助，机遇不断，但需把握时机，积极进取。`
+      content: careerText
     },
     wealth: {
       score: random(4),
-      content: `财运亨通，正财稳定，偏财有机。善于理财，财富积累稳健。中年后财运更佳，但需注意投资风险，切勿贪心。量入为出，财富自然丰盈。`
+      content:
+        gender === 'male'
+          ? `财运亨通，正财稳定，偏财有机。善于投资理财，财富积累稳健。中年后财运更佳，事业收入丰厚。但需注意投资风险，切勿贪心。稳健经营，财富自然丰盈。`
+          : `财运良好，正财稳定，善于持家理财。收入稳定，开支有度，财富积累稳健。中年后财运更佳，多方收入。注意理性消费，避免冲动购物。量入为出，财富自然丰盈。`
     },
     marriage: {
       score: random(5),
-      content: `婚姻运势良好，配偶贤惠，家庭和睦。感情专一，夫妻恩爱，子女孝顺。但需注意沟通，避免误会。相互理解，白头偕老。`
+      content: marriageText
     },
     health: {
       score: random(6),
-      content: `身体健康，精力充沛。但需注意劳逸结合，避免过度劳累。中年后需关注心血管健康，定期体检。保持良好作息，适度运动，可保长寿。`
+      content:
+        gender === 'male'
+          ? `身体健康，精力充沛。但需注意劳逸结合，避免过度劳累和应酬。中年后需关注心血管、肝脏健康，定期体检。戒烟限酒，适度运动，可保长寿。`
+          : `身体健康，气血充盈。但需注意情绪调节，避免过度焦虑和劳累。关注妇科、内分泌健康，定期体检。保持良好作息，适度运动，注重保养，可保青春长驻。`
     },
     family: {
       score: random(7),
-      content: `六亲和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。家族兴旺，福泽绵长。但需多陪伴家人，珍惜天伦之乐。`
+      content:
+        gender === 'male'
+          ? `六亲和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。需承担家庭责任，多陪伴家人。家族兴旺，福泽绵长。`
+          : `六亲和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。善于经营家庭，家庭氛围和谐。但需平衡家庭与自我，珍惜天伦之乐。`
     },
     fengshui: {
       score: random(8),

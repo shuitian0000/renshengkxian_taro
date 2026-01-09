@@ -96,13 +96,14 @@ export default function Index() {
         console.error('AI生成失败，使用本地算法:', error)
         const birthYear = Number.parseInt(birthInfo.birthDate.split('-')[0], 10)
         const birthMonth = Number.parseInt(birthInfo.birthDate.split('-')[1], 10)
-        klineData = generateLocalKLineData(birthYear, birthMonth)
+        klineData = generateLocalKLineData(birthYear, birthMonth, birthInfo.gender)
         dayunPeriods = generateDayunPeriods(birthYear)
-        reportData = generateLocalReport(birthInfo.name, birthYear)
+        reportData = generateLocalReport(birthInfo.name, birthYear, birthInfo.gender)
       }
 
       Taro.setStorageSync('currentReport', {
         name: birthInfo.name,
+        gender: birthInfo.gender,
         birthDate: birthInfo.birthDate,
         birthTime: birthInfo.birthTime,
         birthRegion: birthInfo.birthRegion,
