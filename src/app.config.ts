@@ -40,5 +40,13 @@ export default defineAppConfig({
     navigationBarBackgroundColor: '#F5F0E6',
     navigationBarTitleText: '人生K线图谱',
     navigationBarTextStyle: 'black'
+  },
+  permission: {
+    'scope.camera': {
+      desc: '用于拍摄面相照片，辅助命理分析'
+    },
+    'scope.album': {
+      desc: '用于选择面相照片，辅助命理分析'
+    }
   }
 })
