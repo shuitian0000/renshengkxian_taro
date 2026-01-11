@@ -28,16 +28,25 @@ export default function ChartFullscreen() {
 
   // 放大
   const handleZoomIn = useCallback(() => {
-    setScale((prev) => Math.min(prev + 0.3, 3))
+    setScale((prev) => {
+      const newScale = Math.min(prev + 0.3, 3)
+      console.log('handleZoomIn: prev=', prev, 'newScale=', newScale)
+      return newScale
+    })
   }, [])
 
   // 缩小
   const handleZoomOut = useCallback(() => {
-    setScale((prev) => Math.max(prev - 0.3, 0.3))
+    setScale((prev) => {
+      const newScale = Math.max(prev - 0.3, 0.3)
+      console.log('handleZoomOut: prev=', prev, 'newScale=', newScale)
+      return newScale
+    })
   }, [])
 
   // 重置
   const handleReset = useCallback(() => {
+    console.log('handleReset: scale=0.8')
     setScale(0.8)
     setTranslateX(0)
     setTranslateY(0)

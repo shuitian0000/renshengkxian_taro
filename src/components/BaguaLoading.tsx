@@ -62,7 +62,7 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
               className="absolute right-1/4 bottom-0 w-1/2 h-1/2 rounded-full"
               style={{backgroundColor: '#D4AF37'}}
             />
-            {/* 阳鱼眼 - 金色小点 */}
+            {/* 阳鱼眼 - 金色小点，位于上半部分中心 */}
             <View
               className="absolute w-2.5 h-2.5 rounded-full"
               style={{
@@ -72,10 +72,15 @@ export default function BaguaLoading({text = '天机推算中'}: BaguaLoadingPro
                 transform: 'translate(-50%, -50%)'
               }}
             />
-            {/* 阴鱼眼 - 白色小点 */}
+            {/* 阴鱼眼 - 白色小点，位于下半部分中心 */}
             <View
               className="absolute w-2.5 h-2.5 rounded-full"
-              style={{backgroundColor: '#F5F0E6', bottom: '25%', left: '50%', transform: 'translate(-50%, 50%)'}}
+              style={{
+                backgroundColor: '#F5F0E6',
+                top: '75%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+              }}
             />
           </View>
         </View>

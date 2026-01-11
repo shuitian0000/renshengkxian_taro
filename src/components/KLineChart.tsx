@@ -99,6 +99,11 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
   const [selectedPoint, setSelectedPoint] = useState<KLineDataPoint | null>(null)
   const [isLandscape, setIsLandscape] = useState(false)
 
+  // 调试：输出scale值
+  useEffect(() => {
+    console.log('KLineChart scale:', scale, 'fullscreen:', fullscreen)
+  }, [scale, fullscreen])
+
   useEffect(() => {
     const updateOrientation = () => {
       Taro.getSystemInfo({
@@ -112,7 +117,11 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
     return () => clearInterval(interval)
   }, [])
 
-  const chartWidth = useMemo(() => data.length * 30 * scale, [data.length, scale])
+  const chartWidth = useMemo(() => {
+    const width = data.length * 30 * scale
+    console.log('chartWidth calculated:', width, 'data.length:', data.length, 'scale:', scale)
+    return width
+  }, [data.length, scale])
   // 图表内容高度（包含上下padding）- 全屏模式下更紧凑
   const chartHeight = fullscreen ? (isLandscape ? 350 : 450) : isLandscape ? 300 : 400
   const barSpacing = 30 * scale // K线柱间距，随缩放调整
