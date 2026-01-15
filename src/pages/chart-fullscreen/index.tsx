@@ -65,6 +65,7 @@ export default function ChartFullscreen() {
       {/* K线图 - 横屏全屏显示，支持缩放 */}
       <View className="w-full h-screen">
         <KLineChart
+          key={`kline-${scale}`}
           data={reportData.klineData}
           dayunPeriods={reportData.dayunPeriods}
           fullscreen={true}
