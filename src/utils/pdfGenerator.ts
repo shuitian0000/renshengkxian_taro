@@ -27,26 +27,6 @@ interface ReportData {
  */
 export async function generateAndSavePDF(reportData: ReportData): Promise<boolean> {
   try {
-    // 请求保存到相册的权限
-    try {
-      const authResult = await Taro.getSetting()
-      if (!authResult.authSetting['scope.writePhotosAlbum']) {
-        await Taro.authorize({scope: 'scope.writePhotosAlbum'})
-      }
-    } catch (_authError) {
-      // 用户拒绝授权，引导去设置
-      const modalRes = await Taro.showModal({
-        title: '需要授权',
-        content: '需要您授权保存图片到相册，才能保存报告',
-        confirmText: '去设置',
-        cancelText: '取消'
-      })
-      if (modalRes.confirm) {
-        await Taro.openSetting()
-      }
-      return false
-    }
-
     Taro.showLoading({title: '生成中...', mask: true})
 
     // 获取系统信息
