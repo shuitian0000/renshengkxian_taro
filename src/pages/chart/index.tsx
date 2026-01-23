@@ -217,7 +217,7 @@ export default function Chart() {
                     className="w-4 h-px border-t-2 border-t-dashed"
                     style={{borderColor: 'hsl(var(--chart-dayun))'}}
                   />
-                  <Text className="text-muted-foreground text-xs">大运周期</Text>
+                  <Text className="text-muted-foreground text-xs">生命周期</Text>
                 </View>
               </View>
             </View>

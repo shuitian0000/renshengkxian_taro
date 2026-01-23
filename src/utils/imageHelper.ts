@@ -131,7 +131,7 @@ export async function chooseImageFile(): Promise<UploadFileInput | null> {
 }
 
 /**
- * 上传面相照片到Supabase Storage
+ * 上传面部照片到Supabase Storage
  */
 export async function uploadFaceImage(fileObj: any, fileName: string): Promise<string> {
   const {supabase} = await import('@/client/supabase')
@@ -154,7 +154,7 @@ export async function uploadFaceImage(fileObj: any, fileName: string): Promise<s
 
     return urlData.publicUrl
   } catch (error) {
-    console.error('上传面相照片异常:', error)
+    console.error('上传面部照片异常:', error)
     throw error
   }
 }

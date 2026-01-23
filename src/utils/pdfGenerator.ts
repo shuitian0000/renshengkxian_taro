@@ -76,8 +76,8 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
       {title: '财富分析', data: reportData.reportData.wealth},
       {title: '婚姻分析', data: reportData.reportData.marriage},
       {title: '健康分析', data: reportData.reportData.health},
-      {title: '六亲分析', data: reportData.reportData.family},
-      {title: '风水建议', data: reportData.reportData.fengshui}
+      {title: '家庭关系', data: reportData.reportData.family},
+      {title: '环境建议', data: reportData.reportData.fengshui}
     ]
 
     for (const section of sections) {

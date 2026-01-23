@@ -103,7 +103,7 @@ export async function deleteReport(reportId: string): Promise<boolean> {
 }
 
 /**
- * 上传面相照片到Supabase Storage
+ * 上传面部照片到Supabase Storage
  */
 export async function uploadFaceImage(file: any, fileName: string): Promise<string | null> {
   try {

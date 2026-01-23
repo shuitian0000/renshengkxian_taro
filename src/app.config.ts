@@ -43,10 +43,10 @@ export default defineAppConfig({
   },
   permission: {
     'scope.camera': {
-      desc: '用于拍摄面相照片，辅助数据分析'
+      desc: '用于拍摄面部照片，辅助数据分析'
     },
     'scope.album': {
-      desc: '用于选择面相照片，辅助数据分析'
+      desc: '用于选择面部照片，辅助数据分析'
     }
   }
 })

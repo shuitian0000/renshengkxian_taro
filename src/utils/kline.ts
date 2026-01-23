@@ -18,20 +18,20 @@ export interface DayunPeriod {
 }
 
 /**
- * 天干地支
+ * 周期标记符号（传统符号系统）
  */
 const TIANGAN = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']
 const DIZHI = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
 
 /**
- * 根据出生年份计算大运周期
+ * 根据出生年份计算生命周期
  */
 export function generateDayunPeriods(birthYear: number): DayunPeriod[] {
   const periods: DayunPeriod[] = []
-  const startAge = 8 // 大运从8岁开始
-  const periodLength = 10 // 每个大运10年
+  const startAge = 8 // 周期从8岁开始
+  const periodLength = 10 // 每个周期10年
 
-  // 根据出生年份确定起始天干地支
+  // 根据出生年份确定起始周期标记
   const yearOffset = (birthYear - 1900) % 60
   const tianganIndex = yearOffset % 10
   const dizhiIndex = yearOffset % 12
@@ -119,7 +119,7 @@ export function generateLocalKLineData(
       } else if (score < 5) {
         description = '趋势一般，需谨慎决策，宜以守为攻，蓄势待发。'
       } else {
-        description = '趋势起伏较大，需注意调整，宜修身养性，平和心态。'
+        description = '趋势起伏较大，需注意调整，宜调整心态，平和心态。'
       }
     }
 
@@ -154,7 +154,7 @@ export function generateLocalReport(name: string, birthYear: number, gender: 'ma
   const genderText = gender === 'male' ? '男命' : '女命'
   const careerText =
     gender === 'male'
-      ? '事业趋势稳中有升，适合从事管理、金融、科技等行业。30-50岁为事业黄金期，需把握机遇，积极进取。贵人相助，机遇不断。'
+      ? '事业趋势稳中有升，适合从事管理、金融、科技等行业。30-50岁为事业黄金期，需把握机遇，积极进取。他人帮助，机遇不断。'
       : '事业趋势良好，适合从事教育、医疗、文化、管理等行业。25-45岁为事业发展期，兼顾家庭与事业，平衡发展。女性领导力强，善于协调。'
   const marriageText =
     gender === 'male'
@@ -164,7 +164,7 @@ export function generateLocalReport(name: string, birthYear: number, gender: 'ma
   return {
     summary: {
       score: random(1),
-      content: `${name}${genderText}命格中正平和，五行流转有序。一生趋势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年福寿安康。性格坚韧不拔，处事稳重，善于把握机遇。建议顺应天时，积极进取，必能成就一番事业。`
+      content: `${name}${genderText}综合数据中正平和，各项指标均衡有序。一生趋势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年健康长寿。性格坚韧不拔，处事稳重，善于把握机遇。建议把握时机，积极进取，必能成就一番事业。`
     },
     personality: {
       score: random(2),
@@ -199,12 +199,12 @@ export function generateLocalReport(name: string, birthYear: number, gender: 'ma
       score: random(7),
       content:
         gender === 'male'
-          ? `六亲和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。需承担家庭责任，多陪伴家人。家族兴旺，福泽绵长。`
-          : `六亲和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。善于经营家庭，家庭氛围和谐。但需平衡家庭与自我，珍惜天伦之乐。`
+          ? `家庭和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。需承担家庭责任，多陪伴家人。家族兴旺，福泽绵长。`
+          : `家庭和睦，家庭温馨。父母慈爱，兄弟姐妹情深。子女聪慧，孝顺懂事。善于经营家庭，家庭氛围和谐。但需平衡家庭与自我，珍惜家庭幸福。`
     },
     fengshui: {
       score: random(8),
-      content: `宜居东南方位，有利事业发展。家中宜摆放绿植，增旺生气。卧室宜简洁明亮，有助睡眠。办公桌宜面向窗户，采光充足。注意家居整洁，气场流通。`
+      content: `宜居东南方位，有利事业发展。家中宜摆放绿植，增添生机。卧室宜简洁明亮，有助睡眠。办公桌宜面向窗户，采光充足。注意家居整洁，空气流通。`
     }
   }
 }

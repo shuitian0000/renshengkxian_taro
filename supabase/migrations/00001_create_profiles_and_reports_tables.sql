@@ -23,7 +23,7 @@
 - `birth_time` (text, not null) - 出生时辰
 - `birth_region` (text, not null) - 出生地区
 - `calendar_type` (text, not null) - 历法类型（solar/lunar）
-- `face_image_url` (text) - 面相照片URL
+- `face_image_url` (text) - 面部照片URL
 - `kline_data` (jsonb, not null) - K线图数据
 - `report_data` (jsonb, not null) - 分析报告数据
 - `created_at` (timestamptz, default: now()) - 创建时间

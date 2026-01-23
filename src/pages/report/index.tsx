@@ -71,7 +71,7 @@ export default function Report() {
           {report.career && <ReportCard title="事业分析" content={report.career.content} score={report.career.score} />}
 
           {report.fengshui && (
-            <ReportCard title="风水建议" content={report.fengshui.content} score={report.fengshui.score} />
+            <ReportCard title="环境建议" content={report.fengshui.content} score={report.fengshui.score} />
           )}
 
           {report.wealth && <ReportCard title="财富分析" content={report.wealth.content} score={report.wealth.score} />}
@@ -82,7 +82,7 @@ export default function Report() {
 
           {report.health && <ReportCard title="健康分析" content={report.health.content} score={report.health.score} />}
 
-          {report.family && <ReportCard title="六亲分析" content={report.family.content} score={report.family.score} />}
+          {report.family && <ReportCard title="家庭关系" content={report.family.content} score={report.family.score} />}
 
           <View className="bg-card rounded-lg p-6 space-y-2">
             <Text className="text-card-foreground text-sm font-bold">免责声明</Text>

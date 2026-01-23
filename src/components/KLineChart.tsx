@@ -32,7 +32,7 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
   } else if (age <= 30) {
     lifeStage = '青年创业阶段'
     if (isAuspicious) {
-      stageAdvice = '事业趋势上扬，贵人相助，机遇频现'
+      stageAdvice = '事业趋势上扬，他人帮助，机遇频现'
       specificEvent = age <= 25 ? '初入职场即展露才华，获上司赏识' : '事业上升期，适合跳槽或创业，财运亦佳'
     } else {
       stageAdvice = '事业发展受阻，竞争激烈，需沉淀积累'
@@ -63,36 +63,36 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
   } else {
     lifeStage = '晚年颐养阶段'
     if (isAuspicious) {
-      stageAdvice = '福寿安康，儿孙绕膝，晚年幸福'
-      specificEvent = age <= 70 ? '身体硬朗，精神矍铄，享受天伦之乐' : '高寿之年，心态平和，子孙孝顺，安度晚年'
+      stageAdvice = '健康长寿，儿孙绕膝，晚年幸福'
+      specificEvent = age <= 70 ? '身体硬朗，精神矍铄，享受家庭幸福' : '高寿之年，心态平和，子孙孝顺，安度晚年'
     } else {
       stageAdvice = '注意身体保养，心态宜平和，清心寡欲'
       specificEvent = age <= 70 ? '健康需重点关注，适度运动，清淡饮食' : '身体机能下降，需家人照料，保持乐观心态'
     }
   }
 
-  // 五行分析（根据评分细化）
-  let wuxingAnalysis = ''
+  // 数据模型分析（根据评分细化）
+  let dataAnalysis = ''
   if (isAuspicious) {
     if (score >= 8) {
-      wuxingAnalysis = '五行流转极为顺畅，金木水火土相生相助，天时地利人和，诸事易成'
+      dataAnalysis = '各项指标极为优秀，综合因素相互促进，各方面条件良好，诸事易成'
     } else if (score >= 7) {
-      wuxingAnalysis = '五行平衡良好，气场和谐，趋势稳步上升，顺势而为可获成功'
+      dataAnalysis = '各项指标平衡良好，整体和谐，趋势稳步上升，顺势而为可获成功'
     } else {
-      wuxingAnalysis = '五行基本平衡，略有波动，整体向好，需把握时机'
+      dataAnalysis = '各项指标基本平衡，略有波动，整体向好，需把握时机'
     }
   } else {
     if (score < 4) {
-      wuxingAnalysis = '五行相克严重，气场紊乱，需调和阴阳，化解不利，宜求助专业人士'
+      dataAnalysis = '各项指标波动较大，整体不稳，需调整策略，化解不利，宜求助专业人士'
     } else if (score < 5) {
-      wuxingAnalysis = '五行失衡较重，趋势受阻，需注意调整心态，避免冲动决策'
+      dataAnalysis = '各项指标失衡较重，趋势受阻，需注意调整心态，避免冲动决策'
     } else {
-      wuxingAnalysis = '五行略有相克，趋势起伏，需谨慎行事，以守为攻'
+      dataAnalysis = '各项指标略有波动，趋势起伏，需谨慎行事，以守为攻'
     }
   }
 
   // 综合分析
-  return `【${lifeStage}】${specificEvent}。${stageAdvice}。【五行数据】${wuxingAnalysis}。【综合评分】${score.toFixed(1)}分，趋势${isAuspicious ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇，顺势而为' : '谨慎行事，蓄势待发，修身养性'}。`
+  return `【${lifeStage}】${specificEvent}。${stageAdvice}。【数据模型】${dataAnalysis}。【综合评分】${score.toFixed(1)}分，趋势${isAuspicious ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇，顺势而为' : '谨慎行事，蓄势待发，调整心态'}。`
 }
 
 export default function KLineChart({data, dayunPeriods, fullscreen = false, scale = 1}: KLineChartProps) {

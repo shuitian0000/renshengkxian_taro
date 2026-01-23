@@ -22,14 +22,14 @@ Deno.serve(async (req) => {
     }
 
     // 构建系统提示词
-    const systemPrompt = `你是一位精通中国传统面部特征分析的大师。请分析用户上传的面相照片，提取关键面部特征信息，用于后续的数据分析。
+    const systemPrompt = `你是一位精通面部特征分析的专家。请分析用户上传的面部照片，提取关键面部特征信息，用于后续的数据分析。
 
 要求：
 1. 检查照片是否为正面免冠照片
 2. 检查面部、头部、耳朵等是否清晰可见
 3. 提取面部特征：额头、眉毛、眼睛、鼻子、嘴巴、下巴、耳朵等
-4. 分析面相特征与五行、性格、趋势的关联
-5. 给出简要的面相分析结论（100-200字）
+4. 分析面部特征与性格、趋势的关联
+5. 给出简要的面部分析结论（100-200字）
 
 如果照片不符合要求，请返回错误信息。
 如果照片符合要求，请返回JSON格式的分析结果：
@@ -44,10 +44,10 @@ Deno.serve(async (req) => {
     "chin": "...",
     "ears": "..."
   },
-  "analysis": "面相分析结论..."
+  "analysis": "面部分析结论..."
 }`;
 
-    const userPrompt = '请分析这张面相照片';
+    const userPrompt = '请分析这张面部照片';
 
     // 调用文心一言多模态API
     const response = await fetch(API_ENDPOINT, {
@@ -123,7 +123,7 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('面相分析错误:', error);
+    console.error('面部分析错误:', error);
     return new Response(JSON.stringify({ message: error.message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" }

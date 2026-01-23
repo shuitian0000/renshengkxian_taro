@@ -64,12 +64,12 @@ export default function Index() {
             body: {imageBase64: base64Image}
           })
           if (faceError) {
-            console.error('面相分析失败:', faceError)
+            console.error('面部分析失败:', faceError)
           } else if (faceData?.analysis) {
             faceAnalysis = faceData.analysis
           }
         } catch (error) {
-          console.error('面相照片处理失败，跳过面相分析:', error)
+          console.error('面部照片处理失败，跳过面部分析:', error)
         }
       }
 
@@ -141,7 +141,7 @@ export default function Index() {
           <View className="bg-card rounded-lg p-6 mb-6 shadow-elegant">
             <View className="flex items-center gap-2 mb-4">
               <View className="i-mdi-camera text-2xl text-primary" />
-              <Text className="text-lg font-bold text-card-foreground">面相照片</Text>
+              <Text className="text-lg font-bold text-card-foreground">面部照片</Text>
               <Text className="text-xs text-muted-foreground ml-auto">（可选）</Text>
             </View>
             <FaceUpload onImageSelected={handleImageSelected} onImageRemove={handleImageRemove} />
@@ -153,7 +153,7 @@ export default function Index() {
             开始分析
           </Button>
           <View className="mt-6 text-center">
-            <Text className="text-xs text-muted-foreground">* 面相照片为可选项，不影响数据分析</Text>
+            <Text className="text-xs text-muted-foreground">* 面部照片为可选项，不影响数据分析</Text>
           </View>
         </View>
       </ScrollView>
