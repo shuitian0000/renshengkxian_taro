@@ -74,7 +74,7 @@ export function generateLocalKLineData(
     const random3 = Math.sin(seed * age * 0.3 + 2) * 0.5 + 0.5
 
     // 生命周期曲线：青年上升，中年平稳，老年下降
-    // 性别差异：男性事业运势在30-50岁较强，女性在25-45岁较强
+    // 性别差异：男性事业趋势在30-50岁较强，女性在25-45岁较强
     let lifeCurve = 5
     if (age < 25) {
       lifeCurve = 4 + (age - 5) * 0.15 // 青年期上升
@@ -83,7 +83,7 @@ export function generateLocalKLineData(
         // 男性：30-50岁事业高峰期
         lifeCurve = 7 + Math.sin((age - 25) * 0.2) * 1.5 + (age >= 30 && age <= 50 ? 0.5 : 0)
       } else {
-        // 女性：25-45岁综合运势较强
+        // 女性：25-45岁综合趋势较强
         lifeCurve = 7 + Math.sin((age - 25) * 0.2) * 1.5 + (age >= 25 && age <= 45 ? 0.5 : 0)
       }
     } else {
@@ -100,26 +100,26 @@ export function generateLocalKLineData(
     const low = Math.min(open, close) - random3 * volatility
     const score = (open + close + high + low) / 4
 
-    // 生成吉凶趋势（简化为"吉"或"凶"）
+    // 生成趋向趋势（简化为"正向"或"负向"）
     let trend = ''
     let description = ''
     if (score >= 6) {
-      trend = '吉'
+      trend = '正向'
       if (score >= 8) {
-        description = '运势极佳，诸事顺遂，宜积极进取，把握良机。'
+        description = '趋势极佳，诸事顺遂，宜积极进取，把握良机。'
       } else if (score >= 7) {
-        description = '运势良好，稳步前进，宜顺势而为，开拓创新。'
+        description = '趋势良好，稳步前进，宜顺势而为，开拓创新。'
       } else {
-        description = '运势平稳向好，波澜不惊，宜稳扎稳打，步步为营。'
+        description = '趋势平稳向好，波澜不惊，宜稳扎稳打，步步为营。'
       }
     } else {
-      trend = '凶'
+      trend = '负向'
       if (score < 4) {
-        description = '运势欠佳，多有波折，宜守不宜攻，谨慎行事。'
+        description = '趋势欠佳，多有波折，宜守不宜攻，谨慎行事。'
       } else if (score < 5) {
-        description = '运势一般，需谨慎决策，宜以守为攻，蓄势待发。'
+        description = '趋势一般，需谨慎决策，宜以守为攻，蓄势待发。'
       } else {
-        description = '运势起伏较大，需注意调整，宜修身养性，平和心态。'
+        description = '趋势起伏较大，需注意调整，宜修身养性，平和心态。'
       }
     }
 
@@ -139,7 +139,7 @@ export function generateLocalKLineData(
 }
 
 /**
- * 生成本地命理报告
+ * 生成本地分析报告
  */
 export function generateLocalReport(name: string, birthYear: number, gender: 'male' | 'female' = 'male') {
   // 基于出生年份和性别生成伪随机评分
@@ -154,17 +154,17 @@ export function generateLocalReport(name: string, birthYear: number, gender: 'ma
   const genderText = gender === 'male' ? '男命' : '女命'
   const careerText =
     gender === 'male'
-      ? '事业运势稳中有升，适合从事管理、金融、科技等行业。30-50岁为事业黄金期，需把握机遇，积极进取。贵人相助，机遇不断。'
-      : '事业运势良好，适合从事教育、医疗、文化、管理等行业。25-45岁为事业发展期，兼顾家庭与事业，平衡发展。女性领导力强，善于协调。'
+      ? '事业趋势稳中有升，适合从事管理、金融、科技等行业。30-50岁为事业黄金期，需把握机遇，积极进取。贵人相助，机遇不断。'
+      : '事业趋势良好，适合从事教育、医疗、文化、管理等行业。25-45岁为事业发展期，兼顾家庭与事业，平衡发展。女性领导力强，善于协调。'
   const marriageText =
     gender === 'male'
-      ? '婚姻运势良好，宜晚婚。配偶贤惠，家庭和睦。感情专一，夫妻恩爱，子女孝顺。需注意沟通，承担家庭责任。'
-      : '婚姻运势佳，感情细腻。配偶体贴，家庭温馨。善于经营婚姻，夫妻恩爱，子女聪慧。需平衡家庭与事业，相互理解。'
+      ? '婚姻趋势良好，宜晚婚。配偶贤惠，家庭和睦。感情专一，夫妻恩爱，子女孝顺。需注意沟通，承担家庭责任。'
+      : '婚姻趋势佳，感情细腻。配偶体贴，家庭温馨。善于经营婚姻，夫妻恩爱，子女聪慧。需平衡家庭与事业，相互理解。'
 
   return {
     summary: {
       score: random(1),
-      content: `${name}${genderText}命格中正平和，五行流转有序。一生运势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年福寿安康。性格坚韧不拔，处事稳重，善于把握机遇。建议顺应天时，积极进取，必能成就一番事业。`
+      content: `${name}${genderText}命格中正平和，五行流转有序。一生趋势起伏有度，青年时期需努力奋斗，中年渐入佳境，晚年福寿安康。性格坚韧不拔，处事稳重，善于把握机遇。建议顺应天时，积极进取，必能成就一番事业。`
     },
     personality: {
       score: random(2),

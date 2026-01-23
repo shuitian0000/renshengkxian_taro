@@ -161,7 +161,7 @@ export default function Chart() {
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="space-y-6 pb-8">
           <View className="bg-gradient-card px-8 py-6 space-y-2">
-            <Text className="text-2xl font-bold text-foreground">{reportData.name}的人生K线图谱</Text>
+            <Text className="text-2xl font-bold text-foreground">{reportData.name}的人生趋势图谱</Text>
             <Text className="text-muted-foreground text-sm">
               出生日期：{reportData.birthDate} {reportData.birthTime}
             </Text>
@@ -172,7 +172,7 @@ export default function Chart() {
             <View className="px-8">
               <View className="bg-card rounded-lg p-6 shadow-elegant space-y-4">
                 <View className="flex items-center justify-between">
-                  <Text className="text-lg font-bold text-card-foreground">命理总评</Text>
+                  <Text className="text-lg font-bold text-card-foreground">综合评估</Text>
                   {summary.score !== undefined && (
                     <View className="flex items-center gap-2">
                       <Text className="text-2xl font-bold text-primary">{summary.score}</Text>
@@ -181,7 +181,7 @@ export default function Chart() {
                   )}
                 </View>
                 <Text className="text-card-foreground text-sm leading-relaxed">
-                  {summary.content || '命理总评生成中...'}
+                  {summary.content || '综合评估生成中...'}
                 </Text>
               </View>
             </View>
@@ -190,7 +190,7 @@ export default function Chart() {
           <View className="px-8">
             <View className="bg-card rounded-lg overflow-hidden shadow-elegant">
               <View className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <Text className="text-card-foreground font-bold">运势K线图</Text>
+                <Text className="text-card-foreground font-bold">趋势K线图</Text>
                 <View className="flex items-center gap-1 btn-press" onClick={toggleFullscreen}>
                   <View className="i-mdi-fullscreen text-xl text-primary" />
                   <Text className="text-primary text-sm">全屏查看</Text>
@@ -206,11 +206,11 @@ export default function Chart() {
               <View className="flex items-center gap-4">
                 <View className="flex items-center gap-2">
                   <View className="w-4 h-4 rounded-sm" style={{backgroundColor: 'hsl(var(--chart-auspicious))'}} />
-                  <Text className="text-muted-foreground text-xs">吉运</Text>
+                  <Text className="text-muted-foreground text-xs">正向</Text>
                 </View>
                 <View className="flex items-center gap-2">
                   <View className="w-4 h-4 rounded-sm" style={{backgroundColor: 'hsl(var(--chart-inauspicious))'}} />
-                  <Text className="text-muted-foreground text-xs">凶运</Text>
+                  <Text className="text-muted-foreground text-xs">负向</Text>
                 </View>
                 <View className="flex items-center gap-2">
                   <View

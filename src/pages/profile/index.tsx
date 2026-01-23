@@ -184,8 +184,8 @@ export default function ProfilePage() {
 
             {/* 版权信息 */}
             <View className="text-center space-y-2">
-              <Text className="text-muted-foreground text-xs block">© 2026 人生K线图谱</Text>
-              <Text className="text-muted-foreground text-xs block">基于传统命理，洞察人生运势</Text>
+              <Text className="text-muted-foreground text-xs block">© 2026 人生趋势图谱</Text>
+              <Text className="text-muted-foreground text-xs block">基于传统数据，洞察人生趋势</Text>
             </View>
           </View>
         </ScrollView>
@@ -230,7 +230,7 @@ export default function ProfilePage() {
                 </View>
                 <View className="flex items-start gap-2">
                   <View className="i-mdi-check-circle text-sm text-primary flex-shrink-0" style={{marginTop: '2px'}} />
-                  <Text className="text-muted-foreground text-xs leading-relaxed">保存和管理您的命理报告</Text>
+                  <Text className="text-muted-foreground text-xs leading-relaxed">保存和管理您的分析报告</Text>
                 </View>
                 <View className="flex items-start gap-2">
                   <View className="i-mdi-check-circle text-sm text-primary flex-shrink-0" style={{marginTop: '2px'}} />
@@ -274,8 +274,8 @@ export default function ProfilePage() {
 
           {/* 版权信息 */}
           <View className="text-center space-y-2">
-            <Text className="text-muted-foreground text-xs block">© 2026 人生K线图谱</Text>
-            <Text className="text-muted-foreground text-xs block">基于传统命理，洞察人生运势</Text>
+            <Text className="text-muted-foreground text-xs block">© 2026 人生趋势图谱</Text>
+            <Text className="text-muted-foreground text-xs block">基于传统数据，洞察人生趋势</Text>
           </View>
         </View>
       </ScrollView>

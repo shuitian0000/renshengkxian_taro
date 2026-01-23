@@ -38,15 +38,15 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#F5F0E6',
-    navigationBarTitleText: '人生K线图谱',
+    navigationBarTitleText: '人生趋势图谱',
     navigationBarTextStyle: 'black'
   },
   permission: {
     'scope.camera': {
-      desc: '用于拍摄面相照片，辅助命理分析'
+      desc: '用于拍摄面相照片，辅助数据分析'
     },
     'scope.album': {
-      desc: '用于选择面相照片，辅助命理分析'
+      desc: '用于选择面相照片，辅助数据分析'
     }
   }
 })

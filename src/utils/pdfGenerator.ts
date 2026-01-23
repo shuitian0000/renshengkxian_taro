@@ -50,7 +50,7 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
     ctx.setFillStyle('#D4AF37')
     ctx.setFontSize(48)
     ctx.setTextAlign('center')
-    ctx.fillText('人生K线图谱命理报告', canvasWidth / 2, currentY)
+    ctx.fillText('人生趋势图谱分析报告', canvasWidth / 2, currentY)
     currentY += 80
 
     // 绘制基本信息
@@ -68,9 +68,9 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
     currentY = drawKLineChart(ctx, reportData.klineData, 60, currentY, canvasWidth - 120)
     currentY += 80
 
-    // 绘制命理报告各章节
+    // 绘制分析报告各章节
     const sections = [
-      {title: '命理总评', data: reportData.reportData.summary},
+      {title: '综合评估', data: reportData.reportData.summary},
       {title: '性格分析', data: reportData.reportData.personality},
       {title: '事业分析', data: reportData.reportData.career},
       {title: '财富分析', data: reportData.reportData.wealth},
@@ -93,7 +93,7 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
     ctx.setFillStyle('#B3B3B3')
     ctx.setFontSize(20)
     const disclaimerText =
-      '本报告基于中国传统命理学理论生成，仅供参考娱乐，不构成任何决策依据。人生运势受多种因素影响，建议理性看待，积极进取。'
+      '本报告基于数据模型和算法分析生成，仅供参考娱乐，不构成任何决策依据。人生趋势受多种因素影响，建议理性看待，积极进取。'
     const disclaimerLines = wrapText(ctx, disclaimerText, canvasWidth - 120, 20)
     for (const line of disclaimerLines) {
       ctx.fillText(line, 60, currentY)
@@ -176,7 +176,7 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
   ctx.setFillStyle('#D4AF37')
   ctx.setFontSize(32)
   ctx.setTextAlign('left')
-  ctx.fillText('运势K线图', x, y)
+  ctx.fillText('趋势K线图', x, y)
   y += 50
 
   // 绘制K线图背景
@@ -209,7 +209,7 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
     const highY = y + chartHeight - (point.high / 10) * chartHeight
     const lowY = y + chartHeight - (point.low / 10) * chartHeight
 
-    const isAuspicious = point.trend === '吉'
+    const isAuspicious = point.trend === '正向'
     const color = isAuspicious ? '#D4AF37' : '#8B0000'
     ctx.setFillStyle(color)
     ctx.setStrokeStyle(color)
@@ -248,12 +248,12 @@ function drawKLineChart(ctx: any, data: KLineDataPoint[], x: number, y: number, 
   ctx.setFillStyle('#F5F0E6')
   ctx.setFontSize(20)
   ctx.setTextAlign('left')
-  ctx.fillText('吉运', x + 30, legendY + 10)
+  ctx.fillText('正向', x + 30, legendY + 10)
 
   ctx.setFillStyle('#8B0000')
   ctx.fillRect(x + 120, legendY, 20, 10)
   ctx.setFillStyle('#F5F0E6')
-  ctx.fillText('凶运', x + 150, legendY + 10)
+  ctx.fillText('负向', x + 150, legendY + 10)
 
   return legendY + 40
 }

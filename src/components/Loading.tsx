@@ -1,0 +1,41 @@
+import {Text, View} from '@tarojs/components'
+
+interface LoadingProps {
+  text?: string
+}
+
+/**
+ * 现代化加载动画组件
+ * 使用简洁的圆环旋转动画
+ */
+export default function Loading({text = '数据分析中'}: LoadingProps) {
+  return (
+    <View className="min-h-screen bg-gradient-dark flex flex-col items-center justify-center gap-8 p-8">
+      {/* 主加载动画 - 三层圆环 */}
+      <View className="relative w-32 h-32">
+        {/* 外圈 - 慢速旋转 */}
+        <View
+          className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"
+          style={{animationDuration: '2s'}}
+        />
+        {/* 中圈 - 中速旋转 */}
+        <View
+          className="absolute inset-3 rounded-full border-4 border-transparent border-r-primary animate-spin"
+          style={{animationDuration: '1.5s', animationDirection: 'reverse'}}
+        />
+        {/* 内圈 - 快速旋转 */}
+        <View
+          className="absolute inset-6 rounded-full border-4 border-transparent border-b-primary animate-spin"
+          style={{animationDuration: '1s'}}
+        />
+        {/* 中心点 - 脉动效果 */}
+        <View className="absolute inset-0 flex items-center justify-center">
+          <View className="w-8 h-8 rounded-full bg-primary animate-pulse" />
+        </View>
+      </View>
+
+      {/* 加载文字 */}
+      <Text className="text-xl text-primary font-bold tracking-widest">{text}</Text>
+    </View>
+  )
+}

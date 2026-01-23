@@ -10,10 +10,10 @@ interface KLineChartProps {
   scale?: number // 缩放比例，默认1
 }
 
-// 根据年龄和运势生成具体的分析依据
+// 根据年龄和趋势生成具体的分析依据
 function generateAnalysisBasis(point: KLineDataPoint): string {
   const {age, score, trend} = point
-  const isAuspicious = trend === '吉'
+  const isAuspicious = trend === '正向'
 
   // 人生阶段判断
   let lifeStage = ''
@@ -23,7 +23,7 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
   if (age <= 18) {
     lifeStage = '少年求学阶段'
     if (isAuspicious) {
-      stageAdvice = '学业运势旺盛，理解力强，记忆力佳'
+      stageAdvice = '学业趋势旺盛，理解力强，记忆力佳'
       specificEvent = age <= 12 ? '基础教育顺利，成绩优异' : '中学阶段表现突出，有望考入理想学府'
     } else {
       stageAdvice = '学业需加倍努力，注意力易分散'
@@ -32,7 +32,7 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
   } else if (age <= 30) {
     lifeStage = '青年创业阶段'
     if (isAuspicious) {
-      stageAdvice = '事业运势上扬，贵人相助，机遇频现'
+      stageAdvice = '事业趋势上扬，贵人相助，机遇频现'
       specificEvent = age <= 25 ? '初入职场即展露才华，获上司赏识' : '事业上升期，适合跳槽或创业，财运亦佳'
     } else {
       stageAdvice = '事业发展受阻，竞争激烈，需沉淀积累'
@@ -45,14 +45,14 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
       specificEvent =
         age <= 38 ? '事业巅峰期，适合扩展业务，投资回报丰厚' : '成熟期，宜传承经验，培养团队，财富稳定增长'
     } else {
-      stageAdvice = '运势起伏较大，需谨慎决策，守成为主'
+      stageAdvice = '趋势起伏较大，需谨慎决策，守成为主'
       specificEvent =
         age <= 38 ? '事业压力增大，需平衡工作与家庭，避免过度扩张' : '进入调整期，宜保守理财，关注健康，减少应酬'
     }
   } else if (age <= 60) {
     lifeStage = '成熟稳定阶段'
     if (isAuspicious) {
-      stageAdvice = '运势平稳向好，经验丰富，受人尊重'
+      stageAdvice = '趋势平稳向好，经验丰富，受人尊重'
       specificEvent =
         age <= 52 ? '事业稳定，收入可观，宜规划退休生活' : '逐步交接工作，享受生活，子女事业有成，家庭和睦'
     } else {
@@ -77,7 +77,7 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
     if (score >= 8) {
       wuxingAnalysis = '五行流转极为顺畅，金木水火土相生相助，天时地利人和，诸事易成'
     } else if (score >= 7) {
-      wuxingAnalysis = '五行平衡良好，气场和谐，运势稳步上升，顺势而为可获成功'
+      wuxingAnalysis = '五行平衡良好，气场和谐，趋势稳步上升，顺势而为可获成功'
     } else {
       wuxingAnalysis = '五行基本平衡，略有波动，整体向好，需把握时机'
     }
@@ -85,14 +85,14 @@ function generateAnalysisBasis(point: KLineDataPoint): string {
     if (score < 4) {
       wuxingAnalysis = '五行相克严重，气场紊乱，需调和阴阳，化解不利，宜求助专业人士'
     } else if (score < 5) {
-      wuxingAnalysis = '五行失衡较重，运势受阻，需注意调整心态，避免冲动决策'
+      wuxingAnalysis = '五行失衡较重，趋势受阻，需注意调整心态，避免冲动决策'
     } else {
-      wuxingAnalysis = '五行略有相克，运势起伏，需谨慎行事，以守为攻'
+      wuxingAnalysis = '五行略有相克，趋势起伏，需谨慎行事，以守为攻'
     }
   }
 
   // 综合分析
-  return `【${lifeStage}】${specificEvent}。${stageAdvice}。【五行命理】${wuxingAnalysis}。【综合评分】${score.toFixed(1)}分，运势${isAuspicious ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇，顺势而为' : '谨慎行事，蓄势待发，修身养性'}。`
+  return `【${lifeStage}】${specificEvent}。${stageAdvice}。【五行数据】${wuxingAnalysis}。【综合评分】${score.toFixed(1)}分，趋势${isAuspicious ? '向好' : '欠佳'}，建议${isAuspicious ? '积极把握机遇，顺势而为' : '谨慎行事，蓄势待发，修身养性'}。`
 }
 
 export default function KLineChart({data, dayunPeriods, fullscreen = false, scale = 1}: KLineChartProps) {
@@ -197,8 +197,8 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
             const closeY = getYPosition(point.close)
             const highY = getYPosition(point.high)
             const lowY = getYPosition(point.low)
-            // 使用trend字段判断吉凶
-            const isAuspicious = point.trend === '吉'
+            // 使用trend字段判断趋向
+            const isAuspicious = point.trend === '正向'
             const color = isAuspicious ? 'hsl(var(--chart-auspicious))' : 'hsl(var(--chart-inauspicious))'
             const bodyHeight = Math.abs(closeY - openY)
             const bodyTop = Math.min(openY, closeY)
@@ -252,7 +252,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
             <View
               className={`flex items-center justify-between border-b border-border ${fullscreen ? 'pb-2' : 'pb-3'}`}>
               <Text className={`${fullscreen ? 'text-base' : 'text-lg'} font-bold text-card-foreground`}>
-                {selectedPoint.age}岁运势
+                {selectedPoint.age}岁趋势
               </Text>
               <View className="i-mdi-close text-2xl text-muted-foreground btn-press" onClick={closeDetail} />
             </View>
@@ -260,7 +260,7 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
             <ScrollView scrollY className="flex-1" style={{maxHeight: fullscreen ? 'calc(80vh - 120px)' : 'auto'}}>
               <View className={fullscreen ? 'space-y-2 py-2' : 'space-y-3 py-3'}>
                 <View className="flex items-center justify-between">
-                  <Text className="text-sm text-muted-foreground">运势评分</Text>
+                  <Text className="text-sm text-muted-foreground">趋势评分</Text>
                   <View className="flex items-center gap-2">
                     <Text className={`${fullscreen ? 'text-xl' : 'text-2xl'} font-bold text-primary`}>
                       {selectedPoint.score.toFixed(1)}
@@ -270,20 +270,20 @@ export default function KLineChart({data, dayunPeriods, fullscreen = false, scal
                 </View>
 
                 <View className="flex items-center justify-between">
-                  <Text className="text-sm text-muted-foreground">吉凶趋势</Text>
+                  <Text className="text-sm text-muted-foreground">趋向趋势</Text>
                   <Text
-                    className={`text-sm font-bold ${selectedPoint.trend === '吉' ? 'text-chart-auspicious' : 'text-chart-inauspicious'}`}>
-                    {selectedPoint.trend === '吉' ? '运势向好' : '运势欠佳'}
+                    className={`text-sm font-bold ${selectedPoint.trend === '正向' ? 'text-chart-auspicious' : 'text-chart-inauspicious'}`}>
+                    {selectedPoint.trend === '正向' ? '趋势向好' : '趋势欠佳'}
                   </Text>
                 </View>
 
                 <View className="space-y-1">
-                  <Text className="text-sm font-bold text-card-foreground">运势分析</Text>
+                  <Text className="text-sm font-bold text-card-foreground">趋势分析</Text>
                   <Text className="text-sm text-muted-foreground leading-relaxed">
                     {selectedPoint.description ||
-                      (selectedPoint.trend === '吉'
-                        ? '此年运势向好，诸事顺遂，宜积极进取，把握机遇。'
-                        : '此年运势欠佳，多有波折，宜谨慎行事，稳中求进。')}
+                      (selectedPoint.trend === '正向'
+                        ? '此年趋势向好，诸事顺遂，宜积极进取，把握机遇。'
+                        : '此年趋势欠佳，多有波折，宜谨慎行事，稳中求进。')}
                   </Text>
                 </View>
 

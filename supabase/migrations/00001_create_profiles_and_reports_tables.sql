@@ -15,7 +15,7 @@
 - `created_at` (timestamptz, default: now()) - 创建时间
 
 ### reports 表
-命理报告表，存储用户生成的报告记录
+分析报告表，存储用户生成的报告记录
 - `id` (uuid, primary key) - 报告ID
 - `user_id` (uuid, references profiles) - 用户ID
 - `name` (text, not null) - 姓名
@@ -25,7 +25,7 @@
 - `calendar_type` (text, not null) - 历法类型（solar/lunar）
 - `face_image_url` (text) - 面相照片URL
 - `kline_data` (jsonb, not null) - K线图数据
-- `report_data` (jsonb, not null) - 命理报告数据
+- `report_data` (jsonb, not null) - 分析报告数据
 - `created_at` (timestamptz, default: now()) - 创建时间
 
 ## 2. 安全策略

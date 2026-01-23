@@ -139,7 +139,7 @@ export default function History() {
             <View key={report.id} className="bg-gradient-card rounded-lg p-6 shadow-elegant space-y-4">
               {/* 报告信息 */}
               <View className="space-y-2">
-                <Text className="text-foreground text-lg font-bold">{report.name}的命理报告</Text>
+                <Text className="text-foreground text-lg font-bold">{report.name}的分析报告</Text>
                 <Text className="text-muted-foreground text-sm">
                   出生日期：{report.birth_date} {report.birth_time}
                 </Text>

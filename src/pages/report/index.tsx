@@ -54,14 +54,14 @@ export default function Report() {
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="px-8 py-8 space-y-6">
           <View className="text-center space-y-2">
-            <Text className="text-2xl font-bold gradient-text block">{reportData.name}的命理报告</Text>
+            <Text className="text-2xl font-bold gradient-text block">{reportData.name}的分析报告</Text>
             <Text className="text-muted-foreground text-sm block">
               {reportData.birthDate} {reportData.birthTime}
             </Text>
           </View>
 
           {report.summary && (
-            <ReportCard title="命理总评" content={report.summary.content} score={report.summary.score} />
+            <ReportCard title="综合评估" content={report.summary.content} score={report.summary.score} />
           )}
 
           {report.personality && (
@@ -87,9 +87,9 @@ export default function Report() {
           <View className="bg-card rounded-lg p-6 space-y-2">
             <Text className="text-card-foreground text-sm font-bold">免责声明</Text>
             <Text className="text-muted-foreground text-xs">
-              本报告基于中国传统命理学理论生成，仅供参考娱乐，不构成任何决策依据。
+              本报告基于数据模型和算法分析生成，仅供参考娱乐，不构成任何决策依据。
             </Text>
-            <Text className="text-muted-foreground text-xs">人生运势受多种因素影响，建议理性看待，积极进取。</Text>
+            <Text className="text-muted-foreground text-xs">人生趋势受多种因素影响，建议理性看待，积极进取。</Text>
           </View>
 
           <Button

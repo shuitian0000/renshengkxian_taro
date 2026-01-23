@@ -2,9 +2,9 @@ import {Button, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {useDidShow} from '@tarojs/taro'
 import {useCallback, useState} from 'react'
 import {supabase} from '@/client/supabase'
-import BaguaLoading from '@/components/BaguaLoading'
 import BirthInfoForm, {type BirthInfoData} from '@/components/BirthInfoForm'
 import FaceUpload, {type UploadFileInput} from '@/components/FaceUpload'
+import Loading from '@/components/Loading'
 import {compressImage, imageToBase64, uploadFaceImage} from '@/utils/imageHelper'
 import {generateDayunPeriods, generateLocalKLineData, generateLocalReport} from '@/utils/kline'
 
@@ -124,12 +124,12 @@ export default function Index() {
 
   return (
     <View className="min-h-screen bg-gradient-dark">
-      {loading && <BaguaLoading />}
+      {loading && <Loading />}
       <ScrollView scrollY className="h-screen" style={{background: 'transparent'}}>
         <View className="px-6 py-8">
           <View className="text-center mb-8">
-            <Text className="text-3xl font-bold gradient-text block mb-2">人生K线图谱</Text>
-            <Text className="text-sm text-muted-foreground">天机推演 · 命理分析</Text>
+            <Text className="text-3xl font-bold gradient-text block mb-2">人生趋势图谱</Text>
+            <Text className="text-sm text-muted-foreground">数据模型 · 趋势分析</Text>
           </View>
           <View className="bg-card rounded-lg p-6 mb-6 shadow-elegant">
             <View className="flex items-center gap-2 mb-4">
@@ -150,10 +150,10 @@ export default function Index() {
             className="w-full bg-primary text-primary-foreground py-4 rounded-lg break-keep text-lg font-bold btn-press"
             size="default"
             onClick={generateReport}>
-            开始批命
+            开始分析
           </Button>
           <View className="mt-6 text-center">
-            <Text className="text-xs text-muted-foreground">* 面相照片为可选项，不影响命理分析</Text>
+            <Text className="text-xs text-muted-foreground">* 面相照片为可选项，不影响数据分析</Text>
           </View>
         </View>
       </ScrollView>

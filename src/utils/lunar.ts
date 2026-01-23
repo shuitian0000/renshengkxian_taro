@@ -35,7 +35,7 @@ export function lunarToSolar(year: number, month: number, day: number, isLeapMon
 }
 
 /**
- * 获取八字信息
+ * 获取生辰信息信息
  */
 export function getBaZi(year: number, month: number, day: number, hour: number) {
   const solar = Solar.fromYmdHms(year, month, day, hour, 0, 0)

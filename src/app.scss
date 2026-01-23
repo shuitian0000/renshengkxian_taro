@@ -103,18 +103,4 @@
   .btn-press:active {
     transform: scale(0.98);
   }
-  
-  /* 八卦旋转动画 */
-  @keyframes bagua-rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  .animate-bagua {
-    animation: bagua-rotate 2s linear infinite;
-  }
 }
