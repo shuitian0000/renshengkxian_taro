@@ -41,7 +41,7 @@
     "@tarojs/taro": "4.1.5",
     "immer": "^10.1.1",
     "lunar-javascript": "^1.7.7",
-    "miaoda-sc-plugin": "1.0.51",
+    "miaoda-sc-plugin": "1.0.52",
     "miaoda-taro-utils": "0.0.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
