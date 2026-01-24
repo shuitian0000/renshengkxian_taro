@@ -82,6 +82,7 @@ Deno.serve(async (req) => {
         id: user.id,
         openid: openid,
         nickname: defaultNickname,
+        avatar_url: avatarUrl || '',
         email: email
       }, {
         onConflict: 'id'

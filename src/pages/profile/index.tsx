@@ -1,4 +1,4 @@
-import {ScrollView, Text, View} from '@tarojs/components'
+import {Button, Input, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {getEnv, useDidShow} from '@tarojs/taro'
 import {useCallback, useState} from 'react'
 import {supabase} from '@/client/supabase'
@@ -9,6 +9,8 @@ export default function ProfilePage() {
   const [user, setUser] = useState<Profile | null>(null)
   const [agreed, setAgreed] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState('')
+  const [nickname, setNickname] = useState('')
 
   useDidShow(() => {
     checkLoginStatus()
@@ -32,6 +34,20 @@ export default function ProfilePage() {
     }
   }, [])
 
+  // 选择头像
+  const handleChooseAvatar = useCallback((e: any) => {
+    const {avatarUrl} = e.detail
+    setAvatarUrl(avatarUrl)
+    console.log('选择头像:', avatarUrl)
+  }, [])
+
+  // 输入昵称
+  const handleNicknameInput = useCallback((e: any) => {
+    const value = e.detail.value
+    setNickname(value)
+    console.log('输入昵称:', value)
+  }, [])
+
   // 微信登录
   const handleWechatLogin = useCallback(async () => {
     if (getEnv() !== Taro.ENV_TYPE.WEAPP) {
@@ -52,6 +68,16 @@ export default function ProfilePage() {
       return
     }
 
+    // 检查是否已选择头像和输入昵称
+    if (!avatarUrl || !nickname) {
+      Taro.showToast({
+        title: '请先选择头像并输入昵称',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -61,12 +87,12 @@ export default function ProfilePage() {
         throw new Error('获取登录凭证失败')
       }
 
-      // 调用后端登录接口
-      // 后端会根据openid自动生成唯一昵称（如"用户_abc123"）
+      // 调用后端登录接口，传递用户选择的头像和昵称
       const {data, error} = await supabase.functions.invoke('wechat-miniprogram-login', {
         body: {
-          code: loginResult.code
-          // 不传nickName和avatarUrl，让后端自动生成
+          code: loginResult.code,
+          nickName: nickname,
+          avatarUrl: avatarUrl
         }
       })
 
@@ -111,7 +137,7 @@ export default function ProfilePage() {
     } finally {
       setLoading(false)
     }
-  }, [agreed, checkLoginStatus])
+  }, [agreed, avatarUrl, nickname, checkLoginStatus])
 
   // 退出登录
   const handleLogout = useCallback(async () => {
@@ -141,7 +167,13 @@ export default function ProfilePage() {
           <View className="px-8 py-12 space-y-8">
             {/* 用户信息卡片 */}
             <View className="bg-gradient-card rounded-lg p-8 shadow-elegant text-center space-y-4">
-              <View className="i-mdi-account-circle text-8xl text-primary mx-auto" />
+              {user.avatar_url ? (
+                <View className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary mx-auto">
+                  <img src={user.avatar_url} className="w-full h-full object-cover" />
+                </View>
+              ) : (
+                <View className="i-mdi-account-circle text-8xl text-primary mx-auto" />
+              )}
               <Text className="text-foreground text-xl font-bold block">{user.nickname || '用户'}</Text>
               <Text className="text-muted-foreground text-sm block">
                 {user.role === 'admin' ? '管理员' : '普通用户'}
@@ -200,6 +232,50 @@ export default function ProfilePage() {
               <Text className="text-foreground text-lg font-bold block">微信授权登录</Text>
             </View>
 
+            {/* 头像昵称填写 */}
+            <View className="space-y-4">
+              <Text className="text-foreground text-sm font-bold block">完善个人信息</Text>
+
+              {/* 头像选择 */}
+              <View className="flex flex-col items-center gap-3">
+                <View className="relative">
+                  {avatarUrl ? (
+                    <View className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary">
+                      <img src={avatarUrl} className="w-full h-full object-cover" />
+                    </View>
+                  ) : (
+                    <View className="w-20 h-20 rounded-full bg-muted flex items-center justify-center border-2 border-border">
+                      <View className="i-mdi-account text-4xl text-muted-foreground" />
+                    </View>
+                  )}
+                </View>
+                <Button
+                  className="bg-primary/10 text-primary py-2 px-6 rounded break-keep text-sm"
+                  size="default"
+                  openType="chooseAvatar"
+                  onChooseAvatar={handleChooseAvatar}>
+                  选择微信头像
+                </Button>
+              </View>
+
+              {/* 昵称输入 */}
+              <View className="space-y-2">
+                <Text className="text-muted-foreground text-xs block">昵称</Text>
+                <View className="bg-input rounded border border-border px-4 py-3">
+                  <Input
+                    type="nickname"
+                    className="w-full text-foreground"
+                    style={{padding: 0, border: 'none', background: 'transparent'}}
+                    placeholder="请输入昵称"
+                    placeholderClass="text-muted-foreground"
+                    value={nickname}
+                    onInput={handleNicknameInput}
+                  />
+                </View>
+                <Text className="text-muted-foreground text-xs block">提示：点击输入框可快速填写微信昵称</Text>
+              </View>
+            </View>
+
             {/* 权限说明 */}
             <View className="bg-muted/30 rounded-lg p-4 space-y-3">
               <View className="flex items-start gap-3">
@@ -207,7 +283,7 @@ export default function ProfilePage() {
                 <View className="flex-1 space-y-2">
                   <Text className="text-foreground text-sm font-bold block">授权说明</Text>
                   <Text className="text-muted-foreground text-xs leading-relaxed block">
-                    为了提供更好的服务，我们需要获取您的微信昵称和头像信息。这些信息将用于：
+                    您选择的头像和昵称将用于：
                   </Text>
                 </View>
               </View>
@@ -242,7 +318,7 @@ export default function ProfilePage() {
                 {agreed && <View className="i-mdi-check text-white text-sm" />}
               </View>
               <Text className="text-muted-foreground text-xs leading-relaxed">
-                我已阅读并同意《用户协议》和《隐私政策》，同意授权获取我的微信昵称和头像信息
+                我已阅读并同意《用户协议》和《隐私政策》
               </Text>
             </View>
 
@@ -251,13 +327,13 @@ export default function ProfilePage() {
               className={`w-full py-4 rounded-lg text-center btn-press ${loading ? 'bg-muted' : 'bg-primary'}`}
               onClick={loading ? undefined : handleWechatLogin}>
               <Text className={loading ? 'text-muted-foreground font-bold' : 'text-primary-foreground font-bold'}>
-                {loading ? '登录中...' : '微信授权登录'}
+                {loading ? '登录中...' : '确认登录'}
               </Text>
             </View>
 
             {/* 提示信息 */}
             <View className="text-center">
-              <Text className="text-muted-foreground text-xs block">点击登录即表示您同意授权获取微信信息</Text>
+              <Text className="text-muted-foreground text-xs block">登录即表示您同意授权使用所填写的信息</Text>
             </View>
           </View>
 

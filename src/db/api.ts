@@ -5,6 +5,7 @@ export interface Profile {
   id: string
   openid: string | null
   nickname: string | null
+  avatar_url: string | null
   role: 'user' | 'admin'
   created_at: string
 }
