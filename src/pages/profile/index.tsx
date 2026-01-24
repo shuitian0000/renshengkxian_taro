@@ -55,29 +55,18 @@ export default function ProfilePage() {
     setLoading(true)
 
     try {
-      // 获取用户信息（需要用户授权）
-      const userInfoResult = await Taro.getUserProfile({
-        desc: '用于完善用户资料，提供更好的服务'
-      })
-
-      if (!userInfoResult.userInfo) {
-        throw new Error('获取用户信息失败')
-      }
-
-      const {nickName, avatarUrl} = userInfoResult.userInfo
-
       // 获取登录凭证
       const loginResult = await Taro.login()
       if (!loginResult.code) {
         throw new Error('获取登录凭证失败')
       }
 
-      // 调用后端登录接口
+      // 调用后端登录接口（不再传递昵称和头像，使用匿名登录）
       const {data, error} = await supabase.functions.invoke('wechat-miniprogram-login', {
         body: {
           code: loginResult.code,
-          nickName,
-          avatarUrl
+          nickName: '微信用户', // 默认昵称
+          avatarUrl: '' // 默认头像为空
         }
       })
 
