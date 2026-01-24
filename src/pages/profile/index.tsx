@@ -61,12 +61,12 @@ export default function ProfilePage() {
         throw new Error('获取登录凭证失败')
       }
 
-      // 调用后端登录接口（不再传递昵称和头像，使用匿名登录）
+      // 调用后端登录接口
+      // 后端会根据openid自动生成唯一昵称（如"用户_abc123"）
       const {data, error} = await supabase.functions.invoke('wechat-miniprogram-login', {
         body: {
-          code: loginResult.code,
-          nickName: '微信用户', // 默认昵称
-          avatarUrl: '' // 默认头像为空
+          code: loginResult.code
+          // 不传nickName和avatarUrl，让后端自动生成
         }
       })
 

@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { code } = await req.json().catch(() => ({}));
+    const { code, nickName, avatarUrl } = await req.json().catch(() => ({}));
     if (!code) {
       return new Response(JSON.stringify({ message: "缺少code" }), { 
         status: 400,
@@ -40,13 +40,21 @@ Deno.serve(async (req) => {
 
     const { openid } = wxData;
     const email = `${openid}@wechat.login`;
+    
+    // 生成基于openid的默认昵称（使用后6位，更易识别）
+    const defaultNickname = nickName || `用户_${openid.slice(-6)}`;
 
     const { data: magicLinkData, error: magicLinkError } =
       await supabaseAdmin.auth.admin.generateLink({
         type: "magiclink",
         email,
         options: {
-          data: { from: "wechat", openid },
+          data: { 
+            from: "wechat", 
+            openid,
+            nickname: defaultNickname,
+            avatar_url: avatarUrl || ''
+          },
         },
       });
 
@@ -62,6 +70,21 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ message: "无法生成token" }), { 
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+    
+    // 获取或创建用户
+    const { data: { user } } = await supabaseAdmin.auth.admin.getUserById(magicLinkData.user.id);
+    
+    if (user) {
+      // 更新或创建 profile
+      await supabaseAdmin.from('profiles').upsert({
+        id: user.id,
+        openid: openid,
+        nickname: defaultNickname,
+        email: email
+      }, {
+        onConflict: 'id'
       });
     }
 

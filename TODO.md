@@ -54,7 +54,7 @@
 - [x] 51. 对比v67版本修复太极图和全屏缩放问题（恢复a0aa408版本的太极图代码：背景色金色#D4AF37，左半圆白色，上半部分白色小圆left-1/4，下半部分金色小圆right-1/4，阳鱼眼left: 50% top: 25%，阴鱼眼left: 50% bottom: 25%；移除KLineChart的key属性恢复原有渲染逻辑）
 - [x] 52. 微信审核合规性修改（替换所有算命占卜相关字眼为中性科学表述，创建现代化Loading组件替换太极图八卦加载动画，修改应用名称为"人生趋势图谱"，批量替换敏感词汇，修改免责声明，删除八卦旋转动画CSS，确保通过微信小程序审核）
 - [x] 53. 深度审核合规性检查（再次全面排查并替换所有涉及算命占卜迷信的内容：面相→面部、风水→环境、六亲→家庭关系、大运→生命周期、五行→数据模型、贵人→他人、福寿→健康长寿、天伦→家庭幸福、修身养性→调整心态、天时地利人和→各方面条件良好，修改Edge Functions的AI prompt，修改数据库注释，确保所有文字表述科学中性）
-- [x] 54. 修复微信登录getUserProfile废弃API问题（移除已废弃的getUserProfile调用，改为直接使用Taro.login()获取code进行匿名登录，使用默认昵称"微信用户"和空头像，解决"desc length does not meet the requirements"错误，符合微信最新API规范）
+- [x] 54. 修复微信登录getUserProfile废弃API问题（移除已废弃的getUserProfile调用，改为直接使用Taro.login()获取code进行登录，后端根据openid自动生成唯一昵称如"用户_abc123"，解决"desc length does not meet the requirements"错误，每个微信用户仍然是独立账号基于唯一openid，符合微信最新API规范）
 
 ## 待完成改进
 无
