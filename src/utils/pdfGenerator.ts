@@ -121,12 +121,16 @@ export async function generateAndSavePDF(reportData: ReportData): Promise<boolea
         }
 
         try {
-          // 导出图片
-          const tempFilePath = canvas.toDataURL()
+          // 导出图片（使用Taro的canvasToTempFilePath，因为toDataURL在小程序中不支持）
+          const res = await Taro.canvasToTempFilePath({
+            canvas: canvas,
+            width: canvasWidth,
+            height: currentY
+          })
 
           // 保存到相册
           await Taro.saveImageToPhotosAlbum({
-            filePath: tempFilePath
+            filePath: res.tempFilePath
           })
 
           Taro.hideLoading()
