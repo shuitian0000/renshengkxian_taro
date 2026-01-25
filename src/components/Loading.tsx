@@ -15,22 +15,33 @@ export default function Loading({text = '数据分析中'}: LoadingProps) {
       <View className="relative w-32 h-32">
         {/* 外圈 - 慢速旋转 */}
         <View
-          className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary animate-spin"
-          style={{animationDuration: '2s'}}
+          className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary"
+          style={{
+            animation: 'spin 2s linear infinite'
+          }}
         />
-        {/* 中圈 - 中速旋转 */}
+        {/* 中圈 - 中速反向旋转 */}
         <View
-          className="absolute inset-3 rounded-full border-4 border-transparent border-r-primary animate-spin"
-          style={{animationDuration: '1.5s', animationDirection: 'reverse'}}
+          className="absolute inset-3 rounded-full border-4 border-transparent border-r-primary"
+          style={{
+            animation: 'spin 1.5s linear infinite reverse'
+          }}
         />
         {/* 内圈 - 快速旋转 */}
         <View
-          className="absolute inset-6 rounded-full border-4 border-transparent border-b-primary animate-spin"
-          style={{animationDuration: '1s'}}
+          className="absolute inset-6 rounded-full border-4 border-transparent border-b-primary"
+          style={{
+            animation: 'spin 1s linear infinite'
+          }}
         />
         {/* 中心点 - 脉动效果 */}
         <View className="absolute inset-0 flex items-center justify-center">
-          <View className="w-8 h-8 rounded-full bg-primary animate-pulse" />
+          <View
+            className="w-8 h-8 rounded-full bg-primary"
+            style={{
+              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+            }}
+          />
         </View>
       </View>
 

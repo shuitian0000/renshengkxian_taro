@@ -109,7 +109,12 @@ export default function Report() {
       </ScrollView>
 
       {/* 隐藏的Canvas用于生成报告长图 */}
-      <Canvas canvasId="reportCanvas" style={{position: 'fixed', left: '-9999px', width: '750px', height: '5000px'}} />
+      <Canvas
+        id="reportCanvas"
+        canvasId="reportCanvas"
+        type="2d"
+        style={{position: 'fixed', left: '-9999px', width: '750px', height: '5000px'}}
+      />
     </View>
   )
 }

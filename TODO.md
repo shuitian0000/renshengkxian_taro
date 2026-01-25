@@ -56,6 +56,7 @@
 - [x] 53. 深度审核合规性检查（再次全面排查并替换所有涉及算命占卜迷信的内容：面相→面部、风水→环境、六亲→家庭关系、大运→生命周期、五行→数据模型、贵人→他人、福寿→健康长寿、天伦→家庭幸福、修身养性→调整心态、天时地利人和→各方面条件良好，修改Edge Functions的AI prompt，修改数据库注释，确保所有文字表述科学中性）
 - [x] 54. 修复微信登录getUserProfile废弃API问题（移除已废弃的getUserProfile调用，改为直接使用Taro.login()获取code进行登录，后端根据openid自动生成唯一昵称如"用户_abc123"，解决"desc length does not meet the requirements"错误，每个微信用户仍然是独立账号基于唯一openid，符合微信最新API规范）
 - [x] 55. 实现微信头像昵称填写功能（使用微信官方推荐的头像昵称填写组件，添加Button的open-type="chooseAvatar"获取微信头像，添加Input的type="nickname"快速填写微信昵称，在登录页面添加头像预览和昵称输入框，后端保存用户选择的头像和昵称到profiles表新增的avatar_url字段，个人中心显示用户真实头像和昵称，提升用户体验符合微信最新规范）
+- [x] 56. 真机测试问题修复（修复三个问题：1.应用数据库migration添加avatar_url字段并重新部署Edge Function确保用户头像昵称正确保存和显示；2.修复Loading组件动画不旋转问题，在app.scss添加@keyframes spin和pulse动画定义，修改Loading组件使用内联style的animation属性；3.修复PDF生成一直"生成中"问题，重构pdfGenerator.ts支持新Canvas API（type="2d"）和旧API降级方案，添加generateWithOldAPI函数，在ctx.draw回调中添加500ms延迟确保绘制完成，修复Canvas元素添加id和type属性，优化错误处理和权限授权提示）
 
 ## 待完成改进
 无
