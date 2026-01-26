@@ -108,8 +108,8 @@ Deno.serve(async (req) => {
     }
 
     return new Response(JSON.stringify({
-      token: hashedToken,
-      openid,
+      token: hashedToken
+      // 不返回openid，这是敏感信息，不应该暴露给前端
     }), { 
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" }

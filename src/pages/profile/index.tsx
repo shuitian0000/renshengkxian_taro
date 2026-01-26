@@ -38,6 +38,14 @@ export default function ProfilePage() {
   // 选择头像
   const handleChooseAvatar = useCallback((e: any) => {
     const {avatarUrl} = e.detail
+    if (!avatarUrl) {
+      Taro.showToast({
+        title: '获取头像失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
     setAvatarUrl(avatarUrl)
     console.log('选择头像:', avatarUrl)
   }, [])
@@ -123,11 +131,37 @@ export default function ProfilePage() {
           duration: 2000
         })
 
-        // 等待一下确保后端数据已保存
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        // 清空输入的头像和昵称
+        setAvatarUrl('')
+        setNickname('')
 
-        // 重新获取用户信息
-        await checkLoginStatus()
+        // 重新获取用户信息（多次尝试，确保数据已保存）
+        let retryCount = 0
+        const maxRetries = 3
+        let userInfo: Profile | null = null
+
+        while (retryCount < maxRetries && !userInfo) {
+          await new Promise((resolve) => setTimeout(resolve, 300 * (retryCount + 1)))
+          await checkLoginStatus()
+
+          // 检查是否获取到用户信息
+          const {
+            data: {session: currentSession}
+          } = await supabase.auth.getSession()
+          if (currentSession) {
+            const currentUser = await getCurrentUser()
+            if (currentUser?.nickname) {
+              userInfo = currentUser
+              console.log('成功获取用户信息:', userInfo)
+              break
+            }
+          }
+          retryCount++
+        }
+
+        if (!userInfo) {
+          console.warn('未能立即获取到用户信息，将在页面显示时刷新')
+        }
 
         // 检查是否有重定向路径
         const redirectPath = Taro.getStorageSync('loginRedirectPath')
