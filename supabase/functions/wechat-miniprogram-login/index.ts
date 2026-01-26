@@ -77,16 +77,34 @@ Deno.serve(async (req) => {
     const { data: { user } } = await supabaseAdmin.auth.admin.getUserById(magicLinkData.user.id);
     
     if (user) {
-      // 更新或创建 profile
-      await supabaseAdmin.from('profiles').upsert({
+      // 更新或创建 profile（不包含email字段，因为profiles表没有这个列）
+      console.log('准备保存用户信息:', {
         id: user.id,
         openid: openid,
         nickname: defaultNickname,
-        avatar_url: avatarUrl || '',
-        email: email
+        avatar_url: avatarUrl || ''
+      });
+      
+      const { data: profileData, error: profileError } = await supabaseAdmin.from('profiles').upsert({
+        id: user.id,
+        openid: openid,
+        nickname: defaultNickname,
+        avatar_url: avatarUrl || ''
       }, {
         onConflict: 'id'
-      });
+      }).select();
+      
+      if (profileError) {
+        console.error('保存用户信息失败:', profileError);
+        return new Response(JSON.stringify({ 
+          message: `保存用户信息失败: ${profileError.message}` 
+        }), { 
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" }
+        });
+      }
+      
+      console.log('用户信息保存成功:', profileData);
     }
 
     return new Response(JSON.stringify({

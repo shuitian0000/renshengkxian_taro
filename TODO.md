@@ -58,6 +58,7 @@
 - [x] 55. 实现微信头像昵称填写功能（使用微信官方推荐的头像昵称填写组件，添加Button的open-type="chooseAvatar"获取微信头像，添加Input的type="nickname"快速填写微信昵称，在登录页面添加头像预览和昵称输入框，后端保存用户选择的头像和昵称到profiles表新增的avatar_url字段，个人中心显示用户真实头像和昵称，提升用户体验符合微信最新规范）
 - [x] 56. 真机测试问题修复（修复三个问题：1.应用数据库migration添加avatar_url字段并重新部署Edge Function确保用户头像昵称正确保存和显示；2.修复Loading组件动画不旋转问题，在app.scss添加@keyframes spin和pulse动画定义，修改Loading组件使用内联style的animation属性；3.修复PDF生成一直"生成中"问题，重构pdfGenerator.ts支持新Canvas API（type="2d"）和旧API降级方案，添加generateWithOldAPI函数，在ctx.draw回调中添加500ms延迟确保绘制完成，修复Canvas元素添加id和type属性，优化错误处理和权限授权提示）
 - [x] 57. 发布前全面审查和修复（审查步骤56的三个问题修复情况：问题1登录后显示头像昵称✅验证通过包括数据库migration/Edge Function部署/TypeScript类型定义/前端显示代码/登录页面收集传递；问题2 Loading动画旋转✅验证通过包括app.scss动画定义/Loading组件配置；问题3 PDF生成✅验证通过包括新旧Canvas API支持/500ms延迟/Canvas元素配置/错误处理；发现并修复严重bug：新Canvas API使用canvas.toDataURL()在Taro小程序环境不支持，修改为使用Taro.canvasToTempFilePath({canvas, width, height})确保PDF生成功能在所有环境下正常工作）
+- [x] 58. 彻底修复登录后头像昵称不显示问题（真机测试发现问题1仍未解决，全面排查发现根本原因：1.数据库验证显示所有用户的nickname和avatar_url都是null说明后端没有正确保存；2.后端代码尝试插入不存在的email字段导致upsert静默失败（profiles表只有id/openid/nickname/role/created_at/avatar_url六个字段没有email字段）；3.前端登录成功后立即查询但数据库可能还没写入完成；修复方案：1.移除后端upsert中的email字段只插入存在的列，添加.select()返回插入数据，添加错误检查和详细日志；2.前端登录成功后添加500ms延迟确保后端数据已保存，然后await checkLoginStatus()强制刷新用户信息；3.添加前后端详细日志便于排查问题；4.重新部署Edge Function确保最新代码生效；创建LOGIN_FIX_GUIDE.md详细记录问题根因和修复方案）
 
 ## 待完成改进
 无

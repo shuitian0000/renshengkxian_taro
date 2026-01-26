@@ -24,6 +24,7 @@ export default function ProfilePage() {
       if (session) {
         setIsLoggedIn(true)
         const currentUser = await getCurrentUser()
+        console.log('获取到的用户信息:', currentUser)
         setUser(currentUser)
       } else {
         setIsLoggedIn(false)
@@ -88,6 +89,12 @@ export default function ProfilePage() {
       }
 
       // 调用后端登录接口，传递用户选择的头像和昵称
+      console.log('发送登录请求，参数:', {
+        code: loginResult.code,
+        nickName: nickname,
+        avatarUrl: avatarUrl
+      })
+
       const {data, error} = await supabase.functions.invoke('wechat-miniprogram-login', {
         body: {
           code: loginResult.code,
@@ -98,8 +105,11 @@ export default function ProfilePage() {
 
       if (error) {
         const errorMsg = (await error?.context?.text?.()) || error.message
+        console.error('登录接口调用失败:', errorMsg)
         throw new Error(errorMsg)
       }
+
+      console.log('登录接口返回:', data)
 
       const {data: session} = await supabase.auth.verifyOtp({
         token_hash: data.token,
@@ -113,6 +123,12 @@ export default function ProfilePage() {
           duration: 2000
         })
 
+        // 等待一下确保后端数据已保存
+        await new Promise((resolve) => setTimeout(resolve, 500))
+
+        // 重新获取用户信息
+        await checkLoginStatus()
+
         // 检查是否有重定向路径
         const redirectPath = Taro.getStorageSync('loginRedirectPath')
         if (redirectPath) {
@@ -123,8 +139,6 @@ export default function ProfilePage() {
           } else {
             Taro.navigateTo({url: redirectPath})
           }
-        } else {
-          checkLoginStatus()
         }
       }
     } catch (error: any) {
