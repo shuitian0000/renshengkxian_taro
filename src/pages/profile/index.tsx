@@ -1,4 +1,4 @@
-import {Button, Input, ScrollView, Text, View} from '@tarojs/components'
+import {Button, Image, Input, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {getEnv, useDidShow} from '@tarojs/taro'
 import {useCallback, useState} from 'react'
 import {supabase} from '@/client/supabase'
@@ -38,6 +38,7 @@ export default function ProfilePage() {
   // 选择头像
   const handleChooseAvatar = useCallback((e: any) => {
     const {avatarUrl} = e.detail
+    console.log('选择头像回调，原始URL:', avatarUrl)
     if (!avatarUrl) {
       Taro.showToast({
         title: '获取头像失败，请重试',
@@ -47,7 +48,7 @@ export default function ProfilePage() {
       return
     }
     setAvatarUrl(avatarUrl)
-    console.log('选择头像:', avatarUrl)
+    console.log('头像URL已设置:', avatarUrl)
   }, [])
 
   // 输入昵称
@@ -217,7 +218,7 @@ export default function ProfilePage() {
             <View className="bg-gradient-card rounded-lg p-8 shadow-elegant text-center space-y-4">
               {user.avatar_url ? (
                 <View className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary mx-auto">
-                  <img src={user.avatar_url} className="w-full h-full object-cover" />
+                  <Image src={user.avatar_url} mode="aspectFill" className="w-full h-full" />
                 </View>
               ) : (
                 <View className="i-mdi-account-circle text-8xl text-primary mx-auto" />
@@ -289,7 +290,7 @@ export default function ProfilePage() {
                 <View className="relative">
                   {avatarUrl ? (
                     <View className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary">
-                      <img src={avatarUrl} className="w-full h-full object-cover" />
+                      <Image src={avatarUrl} mode="aspectFill" className="w-full h-full" />
                     </View>
                   ) : (
                     <View className="w-20 h-20 rounded-full bg-muted flex items-center justify-center border-2 border-border">

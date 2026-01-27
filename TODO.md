@@ -60,6 +60,7 @@
 - [x] 57. 发布前全面审查和修复（审查步骤56的三个问题修复情况：问题1登录后显示头像昵称✅验证通过包括数据库migration/Edge Function部署/TypeScript类型定义/前端显示代码/登录页面收集传递；问题2 Loading动画旋转✅验证通过包括app.scss动画定义/Loading组件配置；问题3 PDF生成✅验证通过包括新旧Canvas API支持/500ms延迟/Canvas元素配置/错误处理；发现并修复严重bug：新Canvas API使用canvas.toDataURL()在Taro小程序环境不支持，修改为使用Taro.canvasToTempFilePath({canvas, width, height})确保PDF生成功能在所有环境下正常工作）
 - [x] 58. 彻底修复登录后头像昵称不显示问题（真机测试发现问题1仍未解决，全面排查发现根本原因：1.数据库验证显示所有用户的nickname和avatar_url都是null说明后端没有正确保存；2.后端代码尝试插入不存在的email字段导致upsert静默失败（profiles表只有id/openid/nickname/role/created_at/avatar_url六个字段没有email字段）；3.前端登录成功后立即查询但数据库可能还没写入完成；修复方案：1.移除后端upsert中的email字段只插入存在的列，添加.select()返回插入数据，添加错误检查和详细日志；2.前端登录成功后添加500ms延迟确保后端数据已保存，然后await checkLoginStatus()强制刷新用户信息；3.添加前后端详细日志便于排查问题；4.重新部署Edge Function确保最新代码生效；创建LOGIN_FIX_GUIDE.md详细记录问题根因和修复方案）
 - [x] 59. 微信登录安全审查和优化（全面审查微信登录代码确保符合微信小程序编码规范和安全最佳实践：发现严重安全问题后端返回openid给前端违反微信安全规范，修复移除返回的openid只返回token；优化登录流程改进重试机制，移除硬编码500ms延迟改为递增延迟策略（300ms/600ms/900ms）最多重试3次验证是否真的获取到数据；优化头像选择添加错误处理检查avatarUrl为空的情况提供友好错误提示；优化登录成功后清空输入的头像和昵称防止重复提交；验证符合微信规范包括头像昵称获取使用官方推荐API、登录流程openid只在后端使用、错误处理完善、用户体验良好；创建WECHAT_LOGIN_SECURITY_AUDIT.md详细记录安全审查结果和优化改进）
+- [x] 60. 修复头像显示问题（真机测试发现昵称显示正常但头像不显示，排查发现两个关键问题：1.使用了HTML img标签而不是Taro Image组件导致wxfile://协议的临时文件路径无法渲染；2.数据库中保存的是微信临时文件路径wxfile://tmp_xxx.jpg只在当前会话有效；修复方案：1.添加Image组件导入from @tarojs/components；2.修改"我的"页面头像显示将img改为Image组件添加mode="aspectFill"属性；3.修改登录页面头像预览将img改为Image组件添加mode="aspectFill"属性；4.添加调试日志记录头像URL；修复后登录页面选择头像立即显示预览，"我的"页面正确显示用户头像，当前会话内头像正常显示但重新打开小程序后临时路径失效需要重新选择；创建AVATAR_FIX_GUIDE.md详细记录问题排查过程修复方案和Taro Image组件使用说明）
 
 ## 待完成改进
 无
