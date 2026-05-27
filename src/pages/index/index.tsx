@@ -1,23 +1,26 @@
 import {Button, ScrollView, Text, View} from '@tarojs/components'
 import Taro, {useDidShow} from '@tarojs/taro'
-import {useCallback, useState} from 'react'
+import {useCallback, useRef, useState} from 'react'
 import {supabase} from '@/client/supabase'
 import BirthInfoForm, {type BirthInfoData} from '@/components/BirthInfoForm'
 import FaceUpload, {type UploadFileInput} from '@/components/FaceUpload'
 import Loading from '@/components/Loading'
 import {compressImage, imageToBase64, uploadFaceImage} from '@/utils/imageHelper'
-import {generateDayunPeriods, generateLocalKLineData, generateLocalReport} from '@/utils/kline'
+import {generateMingliData} from '@/utils/mingli'
+
+const USE_LOCAL_ALGORITHM = true
 
 export default function Index() {
   const [birthInfo, setBirthInfo] = useState<BirthInfoData | null>(null)
   const [faceImage, setFaceImage] = useState<UploadFileInput | null>(null)
   const [loading, setLoading] = useState(false)
   const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const localResultCache = useRef<{klineData: unknown; reportData: unknown; dayunPeriods: unknown} | null>(null)
 
   useDidShow(() => {
-    setBirthInfo(null)
     setFaceImage(null)
     setValidationErrors([])
+    localResultCache.current = null
   })
 
   const handleInfoChange = useCallback((data: BirthInfoData) => {
@@ -78,6 +81,7 @@ export default function Index() {
       let dayunPeriods
 
       try {
+        if (USE_LOCAL_ALGORITHM) throw new Error('use local algorithm')
         const {data: reportResult, error: reportError} = await supabase.functions.invoke('generate-destiny-report', {
           body: {
             name: birthInfo.name,
@@ -94,11 +98,35 @@ export default function Index() {
         dayunPeriods = reportResult.dayunPeriods
       } catch (error) {
         console.error('AI生成失败，使用本地算法:', error)
-        const birthYear = Number.parseInt(birthInfo.birthDate.split('-')[0], 10)
-        const birthMonth = Number.parseInt(birthInfo.birthDate.split('-')[1], 10)
-        klineData = generateLocalKLineData(birthYear, birthMonth, birthInfo.gender)
-        dayunPeriods = generateDayunPeriods(birthYear)
-        reportData = generateLocalReport(birthInfo.name, birthYear, birthInfo.gender)
+        const _cacheKey = `${birthInfo.name}-${birthInfo.birthDate}-${birthInfo.birthTime}-${birthInfo.gender}`
+        if (localResultCache.current) {
+          const cached = localResultCache.current
+          klineData = cached.klineData
+          reportData = cached.reportData
+          dayunPeriods = cached.dayunPeriods
+        } else {
+          const birthYear = Number.parseInt(birthInfo.birthDate.split('-')[0], 10)
+          const birthMonth = Number.parseInt(birthInfo.birthDate.split('-')[1], 10)
+          const birthDay = Number.parseInt(birthInfo.birthDate.split('-')[2], 10)
+          const mingliResult = generateMingliData({
+            name: birthInfo.name,
+            birthYear,
+            birthMonth,
+            birthDay,
+            birthTime: birthInfo.birthTime,
+            gender: birthInfo.gender,
+            birthRegion: birthInfo.birthRegion,
+            calendarType: birthInfo.calendarType
+          })
+          localResultCache.current = {
+            klineData: mingliResult.klineData,
+            reportData: mingliResult.report,
+            dayunPeriods: mingliResult.dayunPeriods
+          }
+          klineData = mingliResult.klineData
+          reportData = mingliResult.report
+          dayunPeriods = mingliResult.dayunPeriods
+        }
       }
 
       Taro.setStorageSync('currentReport', {

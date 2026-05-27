@@ -47,10 +47,10 @@ export function getBaZi(year: number, month: number, day: number, hour: number) 
     month: baZi.getMonth(),
     day: baZi.getDay(),
     hour: baZi.getTime(),
-    yearGanZhi: baZi.getYearInGanZhi(),
-    monthGanZhi: baZi.getMonthInGanZhi(),
-    dayGanZhi: baZi.getDayInGanZhi(),
-    hourGanZhi: baZi.getTimeInGanZhi()
+    yearGanZhi: baZi.getYear(),
+    monthGanZhi: baZi.getMonth(),
+    dayGanZhi: baZi.getDay(),
+    hourGanZhi: baZi.getTime()
   }
 }
 

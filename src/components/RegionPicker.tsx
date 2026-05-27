@@ -1,5 +1,5 @@
 import {Picker, Text, View} from '@tarojs/components'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 // 中国省市数据（简化版）
 const CHINA_REGIONS = {
@@ -436,6 +436,11 @@ export default function RegionPicker({value, onChange}: RegionPickerProps) {
   const provinces = Object.keys(CHINA_REGIONS)
   const [selectedProvince, setSelectedProvince] = useState(provinces[0])
   const [selectedCity, setSelectedCity] = useState(CHINA_REGIONS[provinces[0]][0])
+
+  useEffect(() => {
+    onChange(`${selectedProvince} ${selectedCity}`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onChange, selectedCity, selectedProvince])
 
   const handleProvinceChange = (e) => {
     const provinceIndex = e.detail.value

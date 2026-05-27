@@ -63,7 +63,8 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
           <Picker
             mode="selector"
             range={['男', '女']}
-            onChange={(e) => setGender(e.detail.value === 0 ? 'male' : 'female')}>
+            value={gender === 'male' ? 0 : 1}
+            onChange={(e) => setGender(Number(e.detail.value) === 0 ? 'male' : 'female')}>
             <View className="bg-input rounded px-4 py-3 border border-border">
               <Text className="text-card-foreground">{gender === 'male' ? '男' : '女'}</Text>
             </View>
@@ -75,7 +76,8 @@ export default function BirthInfoForm({onChange, onSubmit, validationErrors = []
         <Picker
           mode="selector"
           range={['公历', '农历']}
-          onChange={(e) => setCalendarType(e.detail.value === 0 ? 'solar' : 'lunar')}>
+          value={calendarType === 'solar' ? 0 : 1}
+          onChange={(e) => setCalendarType(Number(e.detail.value) === 0 ? 'solar' : 'lunar')}>
           <View className="bg-input rounded px-4 py-3 border border-border">
             <Text className="text-card-foreground">{calendarType === 'solar' ? '公历' : '农历'}</Text>
           </View>
